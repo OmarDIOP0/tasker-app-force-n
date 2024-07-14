@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasker/screen/home/home_page.dart';
+import 'package:tasker/widget/application_name.dart';
 
 import '../../constantes/colors.dart';
 
@@ -20,19 +21,7 @@ class OnBoardingPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 60,),
-              const Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(top: 5),
-                      child: Icon(Icons.task_alt,size: 25,color:deepgreenColor),
-                    ),
-                    SizedBox(width: 10,),
-                    Text('Tasker',style:TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: deepgreenColor,)),
-                  ]
-                )
-              ),
+              const ApplicationName(),
               const SizedBox(height: 40,),
               Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
