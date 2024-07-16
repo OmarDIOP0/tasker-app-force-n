@@ -27,9 +27,9 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar:const UIAppbarForm(text: "Rejoignez-nous et simplifiez vos tâches"),
       body: SingleChildScrollView(
           child:Container(
-            margin: const EdgeInsets.only(top: 50),
+            margin: const EdgeInsets.only(top: 10),
             width: MediaQuery.of(context).size.width*1,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 1),
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
@@ -44,12 +44,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       comment: "Nom utilisateur",
                       icon: const Icon(Icons.person),
                     ),
+                    const SizedBox(height: 10),
                     UICustomForm(
                         controller: email,
                         nameField: "Email",
                         comment: "Email",
                         icon: const Icon(Icons.email)
                     ),
+                    const SizedBox(height: 10),
                     UICustomPasswordField(
                         controller: password,
                         nameField: "Password",
@@ -60,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(lightgreenColor),
                           padding: MaterialStateProperty.all(
-                              const EdgeInsets.only(top:10,right: 70,bottom:10,left: 70)
+                              const EdgeInsets.only(top:5,right: 50,bottom:5,left: 50)
                           ),
                         ),
                         onPressed: (){
@@ -68,9 +70,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             print("User add Successfully");
                           }
                         },
-                        child: const Text("Enregistrer",style: TextStyle(fontSize: 30,color: Colors.white,fontWeight: FontWeight.bold),)
+                        child: const Text("Enregistrer",style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),)
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

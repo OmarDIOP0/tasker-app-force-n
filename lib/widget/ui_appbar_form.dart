@@ -6,7 +6,7 @@ class UIAppbarForm extends StatelessWidget implements PreferredSizeWidget{
   const UIAppbarForm({Key? key, required this.text}) : super(key: key);
   final String text;
  @override
- Size get preferredSize => const Size.fromHeight(400);
+ Size get preferredSize => const Size.fromHeight(250);
 
   @override
   Widget build(BuildContext context) {
