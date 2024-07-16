@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/custom_appbar_clipper.dart';
+import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_password_field.dart';
@@ -70,7 +72,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         onPressed: (){
                           if(_formKey.currentState!.validate()){
-                            print("User add Successfully");
+                            showSnackBar(context, "User add Successfully",backgroundColor: lightgreenColor);
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                            =>const LoginPage()));
+                          }
+                          else{
+                            showSnackBar(context, "Erreur lors de la validation du formulaire",backgroundColor: Colors.red);
                           }
                         },
                         child: const Text("Enregistrer",style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),)

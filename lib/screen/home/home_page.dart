@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/widget/application_name.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,15 +12,12 @@ class HomePage extends StatelessWidget {
           child: Container(
             height: 120,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: <Color>[
-                Colors.redAccent,
-                Colors.orangeAccent
-              ])
-            ),
+              color: lightgreenColor
+              ),
             child: SafeArea(
                 child: Center(
                   child: ListTile(
-                    title: const Text('Taster'),
+                    title: const ApplicationName(),
                     trailing: IconButton(onPressed:(){}, icon: const Icon(Icons.notifications,size: 20,),
                     color: Colors.white,
                     ),
@@ -26,7 +25,23 @@ class HomePage extends StatelessWidget {
             )),
           )
       ),
-      body:const Center( child: Text('Home Page'),),
+      body:Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors:[
+                Colors.white,
+                lightgreenColor,
+                Colors.white,
+              ]
+          )
+        ),
+        child: const SingleChildScrollView(
+          child: Center(
+            child: Text("Home Page"),
+          )
+        ),
+      ),
     );
   }
 }
