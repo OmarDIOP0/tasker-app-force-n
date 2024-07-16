@@ -22,7 +22,10 @@ class _LoginPageState extends State<LoginPage> {
   
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor:lightgreenColor));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor:lightgreenColor,
+        systemNavigationBarColor: Colors.white
+    ));
     return Scaffold(
       appBar: const UIAppbarForm(text: "Connectez-vous pour acceder à vos taches"),
       body: SingleChildScrollView(

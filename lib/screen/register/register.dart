@@ -26,7 +26,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor:lightgreenColor));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor:lightgreenColor,
+        systemNavigationBarColor: Colors.white
+    ));
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:const UIAppbarForm(text: "Rejoignez-nous et simplifiez vos tâches"),
