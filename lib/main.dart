@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: lightgreenColor),
         useMaterial3: true,
       ),
-      home: const OnBoardingPage()
+      home: const HomePage()
     );
   }
 }

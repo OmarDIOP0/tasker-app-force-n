@@ -25,7 +25,7 @@ class OnBoardingPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30,),
-              const ApplicationName(),
+              const ApplicationName(size: 25,),
               const SizedBox(height: 30,),
               Wrap(
                   children:[

@@ -15,25 +15,26 @@ class HomePage extends StatelessWidget {
               color: lightgreenColor
               ),
             child: SafeArea(
-                child: Center(
                   child: ListTile(
-                    title: const ApplicationName(),
-                    trailing: IconButton(onPressed:(){}, icon: const Icon(Icons.notifications,size: 20,),
+                    leading: IconButton(
+                        onPressed: (){},
+                        icon: const Icon(Icons.menu)
+                    ),
+                    title: const ApplicationName(size: 20,),
+                    trailing: IconButton(onPressed:(){}, icon: const Icon(Icons.notifications,size: 30,color: Colors.black,),
                     color: Colors.white,
                     ),
-                  ),
-            )),
+            ),
+            ),
           )
       ),
       body:Container(
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-              colors:[
-                Colors.white,
-                lightgreenColor,
-                Colors.white,
-              ]
+              colors:[verylightgreenColor,Colors.white,verylightgreenColor],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           )
         ),
         child: const SingleChildScrollView(

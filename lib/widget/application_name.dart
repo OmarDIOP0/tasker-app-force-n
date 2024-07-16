@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../constantes/colors.dart';
 class ApplicationName extends StatelessWidget {
-  const ApplicationName({Key? key}) : super(key: key);
 
+  const ApplicationName({Key? key,required this.size}) : super(key: key);
+  final double size;
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: EdgeInsets.only(top: 5),
-            child: Icon(Icons.task_alt,size: 25,color:deepgreenColor),
+            child: Icon(Icons.task_alt,size: size ,color:deepgreenColor),
           ),
-          SizedBox(width: 10,),
-          Text('Tasker',style:TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: deepgreenColor,)),
+          const SizedBox(width: 10,),
+          const Text('Tasker',style:TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: deepgreenColor,)),
         ]
     );
   }

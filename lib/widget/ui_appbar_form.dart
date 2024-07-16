@@ -22,7 +22,7 @@ class UIAppbarForm extends StatelessWidget implements PreferredSizeWidget{
                   const SizedBox(height: 10),
                   Text(text,style: const TextStyle(color: Colors.white,fontSize: 15),),
                   const SizedBox(height: 30),
-                  const ApplicationName(),
+                  const ApplicationName(size: 25,),
                 ],
               ),
             ),
