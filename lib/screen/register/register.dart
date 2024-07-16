@@ -73,8 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onPressed: (){
                           if(_formKey.currentState!.validate()){
                             showSnackBar(context, "User add Successfully",backgroundColor: lightgreenColor);
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                            =>const LoginPage()));
+                            Navigator.pushNamed(context, '/login');
                           }
                           else{
                             showSnackBar(context, "Erreur lors de la validation du formulaire",backgroundColor: Colors.red);
@@ -90,8 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         const Text("Vous avez deja un compte ?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
                         TextButton(
                             onPressed: (){
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                              =>const LoginPage()));
+                              Navigator.pushNamed(context, '/login');
                             },
                             child:const Text("Se Connectez",style: TextStyle(fontSize: 15,color: lightgreenColor,fontWeight: FontWeight.bold))
                         )

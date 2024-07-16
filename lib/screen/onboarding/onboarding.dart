@@ -50,8 +50,7 @@ class OnBoardingPage extends StatelessWidget {
 
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context)=>const LoginPage()));
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   primary: lightgreenColor,

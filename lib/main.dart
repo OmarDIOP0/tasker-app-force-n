@@ -4,6 +4,7 @@ import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/onboarding/onboarding.dart';
 import 'package:tasker/screen/register/register.dart';
+import 'package:tasker/widget/routegenerator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: lightgreenColor),
         useMaterial3: true,
       ),
-      home: const HomePage()
+      initialRoute: '/onBoarding',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

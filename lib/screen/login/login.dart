@@ -59,8 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: (){
                         if(_keyForm.currentState!.validate()){
                           showSnackBar(context, "Login Successfully",backgroundColor: lightgreenColor);
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                          =>const HomePage()));
+                          Navigator.pushNamed(context, '/');
                         }
                         else{
                           showSnackBar(context, "Erreur lors de la validation du formulaire",backgroundColor: Colors.red);
@@ -76,8 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                       const Text("Vous n'avez pas de compte ?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
                       TextButton(
                           onPressed: (){
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                            =>const RegisterPage()));
+                            Navigator.pushNamed(context, '/register');
                           },
                           child:const Text("S'Authentifier",style: TextStyle(fontSize: 15,color: lightgreenColor,fontWeight: FontWeight.bold))
                       )
