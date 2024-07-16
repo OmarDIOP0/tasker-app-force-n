@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/widget/application_name.dart';
@@ -23,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor:lightgreenColor));
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:const UIAppbarForm(text: "Rejoignez-nous et simplifiez vos tâches"),

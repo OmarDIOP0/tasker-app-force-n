@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/register/register.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
@@ -19,13 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor:lightgreenColor));
     return Scaffold(
       appBar: const UIAppbarForm(text: "Connectez-vous pour acceder à vos taches"),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top:10),
+          margin: const EdgeInsets.only(top:10),
           width: MediaQuery.of(context).size.width*1,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color:Colors.white
           ),
           child: Form(

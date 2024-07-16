@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/screen/register/register.dart';
@@ -11,6 +12,7 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor:Colors.white10));
     return Scaffold(
       body:SingleChildScrollView(
           child:Column(
