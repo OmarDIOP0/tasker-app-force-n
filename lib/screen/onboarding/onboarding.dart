@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasker/screen/home/home_page.dart';
+import 'package:tasker/screen/login/login.dart';
+import 'package:tasker/screen/register/register.dart';
 import 'package:tasker/widget/application_name.dart';
 
 import '../../constantes/colors.dart';
@@ -14,24 +16,23 @@ class OnBoardingPage extends StatelessWidget {
           child:Column(
             children: [
               SizedBox(
-                height: 500,
+                height: 400,
                 child:Image.asset('assets/images/introduction-image.png',
-                  height: 500,width: double.infinity,
+                  height: 400,width: double.infinity,
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 60,),
+              const SizedBox(height: 30,),
               const ApplicationName(),
-              const SizedBox(height: 40,),
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+              const SizedBox(height: 30,),
+              Wrap(
                   children:[
                     Center(
                       child: RichText(
                           text:const TextSpan(
                               style: TextStyle(
-                                  fontSize: 20
+                                  fontSize: 12,
+                                color:Colors.black
                               ),
                               children: <TextSpan>[
                                 TextSpan(text: 'Facilitez la gestion de vos'),
@@ -43,12 +44,12 @@ class OnBoardingPage extends StatelessWidget {
                     ),
                   ]
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 100),
 
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context)=>const HomePage()));
+                      MaterialPageRoute(builder: (context)=>const LoginPage()));
                 },
                 style: ElevatedButton.styleFrom(
                   primary: lightgreenColor,
@@ -58,7 +59,7 @@ class OnBoardingPage extends StatelessWidget {
                   child:Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('Commencer ',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
+                      Text('Commencer ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
                       SizedBox(width: 10),
                       Icon(Icons.arrow_forward,color: Colors.white,size: 30,),
                     ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/custom_appbar_clipper.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
@@ -79,7 +80,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       children: [
                         const Text("Vous avez deja un compte ?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold)),
                         TextButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                              =>const LoginPage()));
+                            },
                             child:const Text("Se Connectez",style: TextStyle(fontSize: 15,color: lightgreenColor,fontWeight: FontWeight.bold))
                         )
                       ],
