@@ -13,7 +13,7 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor:Colors.white10,
+        statusBarColor:Colors.white,
         systemNavigationBarColor: Colors.white
     ));
     return Scaffold(
