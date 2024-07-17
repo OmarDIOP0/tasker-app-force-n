@@ -95,7 +95,7 @@ class _AccueilPageState extends State<AccueilPage> {
                           ),
                           children: <TextSpan>[
                             TextSpan(text: 'Total :'),
-                            TextSpan(text: ' 3',style: TextStyle(color: deepgreenColor,fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' 6',style: TextStyle(color: deepgreenColor,fontWeight: FontWeight.bold)),
                           ]
                       )
                   ),
