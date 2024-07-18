@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: AppBar(
             title:const Text('Omar DIOP',style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold),),
             centerTitle: true,
+            automaticallyImplyLeading: false,
             backgroundColor: verylightgreenColor,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
