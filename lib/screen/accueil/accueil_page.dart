@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
@@ -15,6 +16,15 @@ class AccueilPage extends StatefulWidget {
 class _AccueilPageState extends State<AccueilPage> {
   TextEditingController search = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  void _navigateToDetail(String nom_tache,String contenu,String date,String priorite,String couleur){
+    Navigator.push(context, MaterialPageRoute(builder: (context)
+    =>DetailTask(
+        nom_tache: nom_tache,
+        contenu: contenu,
+        date: date,
+        priorite: priorite,
+        couleur: couleur)));
+  }
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -100,44 +110,55 @@ class _AccueilPageState extends State<AccueilPage> {
                       )
                   ),
                   const SizedBox(height: 15),
-                  const Column(
+                  Column(
                     children: [
-                      UICustomContainer(
-                          projetName: "Design du projet",
-                          niveau: "Eleve",
-                          color: Colors.red,
-                          dateTime: "27 Juin 2024"
+                      GestureDetector(
+                        onTap: (){
+                          _navigateToDetail(
+                              "Design du projet",
+                              "Design du projet",
+                              "27 Juin 2024",
+                              "Eleve",
+                              "red"
+                          );
+                        },
+                        child:const UICustomContainer(
+                            projetName: "Design du projet",
+                            niveau: "Eleve",
+                            color: Colors.red,
+                            dateTime: "27 Juin 2024"
+                        ),
                       ),
-                      SizedBox(height: 15),
-                      UICustomContainer(
+                      const SizedBox(height: 15),
+                      const UICustomContainer(
                           projetName: "Creation projet Flutter",
                           niveau: "Faible",
                           color: lightgreenColor,
                           dateTime: "02 Juillet 2024"
                       ),
-                      SizedBox(height: 15),
-                      UICustomContainer(
+                      const SizedBox(height: 15),
+                      const UICustomContainer(
                           projetName: "Integration des interfaces",
                           niveau: "Moyenne",
                           color: Colors.yellow,
                           dateTime: "17 Juillet 2024"
                       ),
-                      SizedBox(height: 15),
-                       UICustomContainer(
+                      const SizedBox(height: 15),
+                       const UICustomContainer(
                           projetName: "Design du projet",
                           niveau: "Eleve",
                           color: Colors.red,
                           dateTime: "27 Juin 2024"
                       ),
-                      SizedBox(height: 15),
-                      UICustomContainer(
+                      const SizedBox(height: 15),
+                      const UICustomContainer(
                           projetName: "Creation projet Flutter",
                           niveau: "Faible",
                           color: lightgreenColor,
                           dateTime: "02 Juillet 2024"
                       ),
-                      SizedBox(height: 15),
-                      UICustomContainer(
+                      const SizedBox(height: 15),
+                      const UICustomContainer(
                           projetName: "Integration des interfaces",
                           niveau: "Moyenne",
                           color: Colors.yellow,

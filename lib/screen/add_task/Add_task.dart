@@ -21,7 +21,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.white
+      systemNavigationBarColor: verylightgreenColor
     ));
     return Scaffold(
       appBar: AppBar(title: const Text("AJOUTER UNE TACHE"),centerTitle: true,backgroundColor: verylightgreenColor,),
@@ -102,6 +102,7 @@ class _AddTaskState extends State<AddTask> {
                     child: const Padding(
                       padding:EdgeInsets.all(10),
                       child:Row(
+
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('Enregistrer ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
