@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: lightgreenColor),
         useMaterial3: true,
       ),
-      initialRoute: '/',
+      initialRoute: '/add-task',
       onGenerateRoute: RouteGenerator.generateRoute,
     );
   }

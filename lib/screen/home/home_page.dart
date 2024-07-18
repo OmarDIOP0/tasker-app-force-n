@@ -24,7 +24,9 @@ class _HomePageState extends State<HomePage> {
         tooltip: "Ajouté une tache",
         shape: const CircleBorder(),
         elevation: 10,
-          onPressed:(){},
+          onPressed:(){
+          Navigator.pushNamed(context, '/add-task');
+          },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
