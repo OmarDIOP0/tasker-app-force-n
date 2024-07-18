@@ -86,7 +86,7 @@ class _AccueilPageState extends State<AccueilPage> {
                         )
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
                   RichText(
                       text:const TextSpan(
                           style: TextStyle(

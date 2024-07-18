@@ -17,20 +17,44 @@ class UICustomContainer extends StatelessWidget {
       },
       child: ClipRRect(
         child: Container(
-          padding:const EdgeInsets.all(10),
+          padding:const EdgeInsets.only(left: 10,top: 0,bottom: 2),
           height: 120,
           decoration: BoxDecoration(
             border: Border.all(color: deepgreenColor,width: 2),
-            borderRadius:BorderRadius.circular(20),
+            borderRadius:BorderRadius.circular(10),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.light_mode_sharp,color: lightgreenColor,),
-                  const SizedBox(width: 10),
-                  Text(projetName ,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),)
+                  Row(
+                    children: [
+                      const Icon(Icons.light_mode_sharp,color: lightgreenColor,),
+                      const SizedBox(width: 10),
+                      Text(projetName ,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      PopupMenuButton<String>(
+                        onSelected: (value){
+                          print("Action selectionnée : $value");
+                        },
+                        itemBuilder: (BuildContext context){
+                          return {'Option1','Option2','Option3'}
+                              .map((String choice){
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               Row(
@@ -45,7 +69,6 @@ class UICustomContainer extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
