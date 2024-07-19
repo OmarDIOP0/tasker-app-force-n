@@ -21,27 +21,79 @@ class _DetailTaskState extends State<DetailTask> {
       appBar: AppBar(title: const Text("DETAIL DE LA TACHE"),
         centerTitle: true,backgroundColor:verylightgreenColor,
       ),
-      body:Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [verylightgreenColor,Colors.white,verylightgreenColor],
-              begin: Alignment.topCenter,
-              end:Alignment.bottomCenter,
-            )
-        ),
-        padding: const EdgeInsets.only(top: 20),
+      body:SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [verylightgreenColor,Colors.white,verylightgreenColor],
+                begin: Alignment.topCenter,
+                end:Alignment.bottomCenter,
+              )
+          ),
+          padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-              Text('Projet :${widget.nom_tache}'),
-              Text('Contenu :${widget.contenu}'),
-              Text('Date :${widget.date}'),
-              Text('Priorite :${widget.priorite}'),
-              Text('Couleur :${widget.couleur}',style: TextStyle(backgroundColor: Colors.red),),
+              const SizedBox(height: 30),
+              UICustumProfileForm(
+                value: widget.nom_tache,
+                comment: "Nom de la tache",
+                icon: const Icon(Icons.task),
+              ),
+              const SizedBox(height: 30),
+              Padding(
+                padding:const EdgeInsets.only(left: 20,right: 20),
+                child: TextFormField(
+                  initialValue: widget.contenu,
+                  decoration: InputDecoration(
+                      prefixIcon:const  Icon(Icons.description_outlined),
+                      hintText: "contenu_de_la_tache",
+                      border:  OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 50,horizontal: 20)
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              UICustumProfileForm(
+                value: 'Creation :${widget.date}',
+                comment: "Creation de la tache",
+                icon: const Icon(Icons.date_range),
+              ),
+              const SizedBox(height: 30),
+              UICustumProfileForm(
+                value: 'Modification :${widget.date}',
+                comment: "Modification de la tache",
+                icon: const Icon(Icons.date_range),
+              ),
+              const SizedBox(height: 30),
+              UICustumProfileForm(
+                value: widget.couleur,
+                comment: "Couleur de la tache",
+                icon: const Icon(Icons.color_lens),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  const SizedBox(width: 20),
+                  const Text("Priorite :"),
+                  const SizedBox(width: 10),
+                  Container(
+                    padding:const EdgeInsets.symmetric(vertical: 10,horizontal: 70),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color:Colors.red
+                    ),
+                    child: Text(widget.priorite),
+                  ),
+                ],
+              )
             ],
           ),
         ),
+      )
     );
   }
 }
