@@ -11,11 +11,13 @@ class UICustomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        print("Vous avez clique sur le projet : $projetName");
-      },
-      child: ClipRRect(
+    return
+      //GestureDetector(
+      //onTap: (){
+       // print("Vous avez clique sur le projet : $projetName");
+      //},
+     // child:
+    ClipRRect(
         child: Container(
           padding:const EdgeInsets.only(left: 10,top: 0,bottom: 2),
           height: 120,
@@ -81,7 +83,7 @@ class UICustomContainer extends StatelessWidget {
             ],
           ),
         ),
-      ),
+     // ),
     );
   }
 }

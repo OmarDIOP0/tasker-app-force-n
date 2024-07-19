@@ -19,10 +19,11 @@ class _DetailTaskState extends State<DetailTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("DETAIL DE LA TACHE"),
-        centerTitle: true,backgroundColor: Colors.red,
+        centerTitle: true,backgroundColor:verylightgreenColor,
       ),
       body:Container(
         height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [verylightgreenColor,Colors.white,verylightgreenColor],
@@ -33,11 +34,11 @@ class _DetailTaskState extends State<DetailTask> {
         padding: const EdgeInsets.only(top: 20),
           child: Column(
             children: [
-               Text('Projet :${widget.nom_tache}'),
+              Text('Projet :${widget.nom_tache}'),
               Text('Contenu :${widget.contenu}'),
               Text('Date :${widget.date}'),
               Text('Priorite :${widget.priorite}'),
-              Text('Couleur :${widget.couleur}'),
+              Text('Couleur :${widget.couleur}',style: TextStyle(backgroundColor: Colors.red),),
             ],
           ),
         ),
