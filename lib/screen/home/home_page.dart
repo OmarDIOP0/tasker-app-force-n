@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _childreenPage[_currentIndex],
       bottomNavigationBar:BottomNavigationBar(
+            unselectedItemColor: Colors.white,
             selectedItemColor: deepgreenColor,
             backgroundColor: verylightgreenColor,
             currentIndex: _currentIndex,

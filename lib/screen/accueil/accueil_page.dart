@@ -191,21 +191,27 @@ class _AccueilPageState extends State<AccueilPage> {
         ),
       ),
       drawer: Drawer(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(0),
+            topLeft: Radius.circular(0)
+          )
+        ),
         backgroundColor: verylightgreenColor,
         width: 220,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: deepgreenColor,
+                decoration: BoxDecoration(
+                  color: deepgreenColor,
+                ),
+                accountName: Text("Omar DIOP"),
+                accountEmail: Text("omardiop@gmail.com"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
+                ),
               ),
-              accountName: Text("Omar DIOP"),
-              accountEmail: Text("omardiop@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
-              ),
-            ),
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Accueil"),
