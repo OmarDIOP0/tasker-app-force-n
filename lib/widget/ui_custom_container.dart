@@ -45,7 +45,7 @@ class UICustomContainer extends StatelessWidget {
                           print("Action selectionnée : $value");
                         },
                         itemBuilder: (BuildContext context){
-                          return {'Option1','Option2','Option3'}
+                          return {'Modifier','Supprimer'}
                               .map((String choice){
                             return PopupMenuItem<String>(
                               value: choice,
