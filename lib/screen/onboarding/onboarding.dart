@@ -17,8 +17,7 @@ class OnBoardingPage extends StatelessWidget {
         systemNavigationBarColor: Colors.white
     ));
     return Scaffold(
-      body:SingleChildScrollView(
-          child:Column(
+      body:Column(
             children: [
               SizedBox(
                 height: 400,
@@ -60,19 +59,24 @@ class OnBoardingPage extends StatelessWidget {
                 ),
                 child: const Padding(
                   padding:EdgeInsets.all(10),
-                  child:Row(
-                    mainAxisSize: MainAxisSize.min,
+                  child:Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text('Commencer ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
-                      SizedBox(width: 10),
-                      Icon(Icons.arrow_forward,color: Colors.white,size: 30,),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Commencer ',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),),
+                          SizedBox(width: 10),
+                          Icon(Icons.arrow_forward,color: Colors.white,size: 30,),
+                        ],
+                      ),
                     ],
-                  ),
+                  )
+
                 ),
               )
             ],
           ) ,
-      ) ,
     );
   }
 }

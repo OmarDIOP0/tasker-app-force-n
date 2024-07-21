@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
+import 'package:tasker/screen/profile/profile_page.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
@@ -183,6 +184,7 @@ class _AccueilPageState extends State<AccueilPage> {
                       color: Colors.yellow,
                       dateTime: "17 Juillet 2024",
                     ),
+                    const SizedBox(height: 15),
                   ],
                 ),
               ],
@@ -213,17 +215,17 @@ class _AccueilPageState extends State<AccueilPage> {
                 ),
               ),
             ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text("Accueil"),
+              leading: const Icon(Icons.account_circle),
+              title: const Text("Mon compte"),
               onTap: () {
                 // Action à effectuer lors du clic
               },
             ),
             ListTile(
-              leading: const Icon(Icons.task),
-              title: const Text("Tâches"),
+              leading: const Icon(Icons.share),
+              title: const Text("Partager"),
               onTap: () {
-                // Action à effectuer lors du clic
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const ProfilePage()));
               },
             ),
             ListTile(
@@ -233,7 +235,9 @@ class _AccueilPageState extends State<AccueilPage> {
                 // Action à effectuer lors du clic
               },
             ),
-            const Divider(),
+            const Divider(
+              color: deepgreenColor,
+            ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Déconnexion"),
