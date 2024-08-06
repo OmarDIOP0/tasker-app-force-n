@@ -17,6 +17,65 @@ class AccueilPage extends StatefulWidget {
 class _AccueilPageState extends State<AccueilPage> {
   TextEditingController search = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String _selectedFilter = 'Nom';
+  List<Map<String, String>> _tasks = [
+    {
+      'nom_tache': 'Design du projet',
+      'contenu': 'Design du projet',
+      'date': '27 Juin 2024',
+      'priorite': 'Élevé',
+      'couleur': 'red',
+    },
+    {
+      'nom_tache': 'Création projet Flutter',
+      'contenu': 'Création projet Flutter',
+      'date': '02 Juillet 2024',
+      'priorite': 'Faible',
+      'couleur': 'green',
+    },
+    {
+      'nom_tache': 'Intégration des interfaces',
+      'contenu': 'Intégration des interfaces',
+      'date': '17 Juillet 2024',
+      'priorite': 'Moyenne',
+      'couleur': 'yellow',
+    },
+  ];
+
+  List<Map<String, String>> _filteredTasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredTasks = _tasks;
+  }
+
+  void _filterTasks() {
+    setState(() {
+      if (search.text.isEmpty) {
+        _filteredTasks = _tasks;
+      } else {
+        _filteredTasks = _tasks.where((task) {
+          switch (_selectedFilter) {
+            case 'Nom':
+              return task['nom_tache']!
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase());
+            case 'Date':
+              return task['date']!
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase());
+            case 'Priorité':
+              return task['priorite']!
+                  .toLowerCase()
+                  .contains(search.text.toLowerCase());
+            default:
+              return false;
+          }
+        }).toList();
+      }
+    });
+  }
 
   void _navigateToDetail(String nom_tache, String contenu, String date, String priorite, String couleur) {
     Navigator.push(
@@ -50,9 +109,13 @@ class _AccueilPageState extends State<AccueilPage> {
           ),
         ),
         title: const ApplicationName(size: 20),
-        actions: const [
-          Icon(Icons.notifications_active_outlined, size: 30),
-          SizedBox(width: 10),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.pushNamed(context, '/notification');
+          },
+              icon: const Icon(Icons.notifications_active_outlined,size: 30,)
+          ),
+          const SizedBox(width: 10),
         ],
         centerTitle: true,
         backgroundColor: verylightgreenColor,
@@ -82,35 +145,51 @@ class _AccueilPageState extends State<AccueilPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 1.0),
                   child: Form(
                     key: _formKey,
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: search,
-                            decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search_rounded),
-                              labelText: "Rechercher",
-                              hintText: "rechercher",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: search,
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.search_rounded),
+                                  labelText: "Rechercher",
+                                  hintText: "Rechercher",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Saisir quelque chose";
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  _filterTasks();
+                                },
                               ),
-                              contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Saisir quelque chose";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              print("<Welcome>");
-                            }
-                          },
-                          child: const Text("Search"),
+                            const SizedBox(width: 10),
+                            DropdownButton<String>(
+                              value: _selectedFilter,
+                              items: <String>['Nom', 'Date', 'Priorité']
+                                  .map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedFilter = newValue!;
+                                  _filterTasks();
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -118,74 +197,45 @@ class _AccueilPageState extends State<AccueilPage> {
                 ),
                 const SizedBox(height: 15),
                 RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
+                  text: TextSpan(
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
                     ),
                     children: <TextSpan>[
-                      TextSpan(text: 'Total :'),
-                      TextSpan(text: ' 6', style: TextStyle(color: deepgreenColor, fontWeight: FontWeight.bold)),
+                      const TextSpan(text: 'Total :'),
+                      TextSpan(
+                        text: ' ${_filteredTasks.length}',
+                        style: const TextStyle(color: deepgreenColor, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 15),
                 Column(
-                  children: [
-                    GestureDetector(
+                  children: _filteredTasks.map((task) {
+                    return GestureDetector(
                       onTap: () {
                         _navigateToDetail(
-                          "Design du projet",
-                          "Design du projet",
-                          "27 Juin 2024",
-                          "Élevé",
-                          "red",
+                          task['nom_tache']!,
+                          task['contenu']!,
+                          task['date']!,
+                          task['priorite']!,
+                          task['couleur']!,
                         );
                       },
-                      child: const UICustomContainer(
-                        projetName: "Design du projet",
-                        niveau: "Élevé",
-                        color: Colors.red,
-                        dateTime: "27 Juin 2024",
+                      child: UICustomContainer(
+                        projetName: task['nom_tache']!,
+                        niveau: task['priorite']!,
+                        color: task['couleur'] == 'red'
+                            ? Colors.red
+                            : task['couleur'] == 'green'
+                            ? lightgreenColor
+                            : Colors.yellow,
+                        dateTime: task['date']!,
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    const UICustomContainer(
-                      projetName: "Création projet Flutter",
-                      niveau: "Faible",
-                      color: lightgreenColor,
-                      dateTime: "02 Juillet 2024",
-                    ),
-                    const SizedBox(height: 15),
-                    const UICustomContainer(
-                      projetName: "Intégration des interfaces",
-                      niveau: "Moyenne",
-                      color: Colors.yellow,
-                      dateTime: "17 Juillet 2024",
-                    ),
-                    const SizedBox(height: 15),
-                    const UICustomContainer(
-                      projetName: "Design du projet",
-                      niveau: "Élevé",
-                      color: Colors.red,
-                      dateTime: "27 Juin 2024",
-                    ),
-                    const SizedBox(height: 15),
-                    const UICustomContainer(
-                      projetName: "Création projet Flutter",
-                      niveau: "Faible",
-                      color: lightgreenColor,
-                      dateTime: "02 Juillet 2024",
-                    ),
-                    const SizedBox(height: 15),
-                    const UICustomContainer(
-                      projetName: "Intégration des interfaces",
-                      niveau: "Moyenne",
-                      color: Colors.yellow,
-                      dateTime: "17 Juillet 2024",
-                    ),
-                    const SizedBox(height: 15),
-                  ],
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -194,10 +244,10 @@ class _AccueilPageState extends State<AccueilPage> {
       ),
       drawer: Drawer(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(0),
-            topLeft: Radius.circular(0)
-          )
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(0),
+                topLeft: Radius.circular(0)
+            )
         ),
         backgroundColor: verylightgreenColor,
         width: 220,
@@ -205,34 +255,32 @@ class _AccueilPageState extends State<AccueilPage> {
           padding: EdgeInsets.zero,
           children: [
             const UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: deepgreenColor,
-                ),
-                accountName: Text("Omar DIOP"),
-                accountEmail: Text("omardiop@gmail.com"),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
-                ),
+              decoration: BoxDecoration(
+                color: deepgreenColor,
               ),
+              accountName: Text("Omar DIOP"),
+              accountEmail: Text("omardiop@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
+              ),
+            ),
             ListTile(
               leading: const Icon(Icons.account_circle),
               title: const Text("Mon compte"),
-              onTap: () {
-                // Action à effectuer lors du clic
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share),
-              title: const Text("Partager"),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const ProfilePage()));
               },
             ),
             ListTile(
+              leading: const Icon(Icons.share),
+              title: const Text("Partager"),
+              onTap: () {},
+            ),
+            ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Paramètres"),
               onTap: () {
-                // Action à effectuer lors du clic
+
               },
             ),
             const Divider(
@@ -242,7 +290,7 @@ class _AccueilPageState extends State<AccueilPage> {
               leading: const Icon(Icons.logout),
               title: const Text("Déconnexion"),
               onTap: () {
-                // Action à effectuer lors du clic
+
               },
             ),
           ],

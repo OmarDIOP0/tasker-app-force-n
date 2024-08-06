@@ -20,6 +20,7 @@ class UICustomContainer extends StatelessWidget {
     ClipRRect(
         child: Container(
           padding:const EdgeInsets.only(left: 10,top: 0,bottom: 2),
+          margin: const EdgeInsets.only(bottom: 20),
           height: 120,
           decoration: BoxDecoration(
             border: Border.all(color: deepgreenColor,width: 2),
@@ -78,7 +79,7 @@ class UICustomContainer extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(dateTime)
                 ],
-              )
+              ),
 
             ],
           ),
