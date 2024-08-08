@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_add_task_desc.dart';
 
@@ -96,7 +97,15 @@ class _AddTaskState extends State<AddTask> {
                     ),
                     onPressed: (){
                       if(_keyForm.currentState!.validate()){
-                        print("Enregistrer");
+                        addTask(context,
+                            nom_tache.text,
+                            contenu_tache.text,
+                            priorite.text,
+                            couleur.text,
+                            date.text
+                        ).then((_){
+                          nom_tache.clear();contenu_tache.clear();priorite.clear();couleur.clear();date.clear();
+                        });
                       }
                     },
                     child: const Padding(
