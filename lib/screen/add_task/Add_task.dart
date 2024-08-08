@@ -106,6 +106,7 @@ class _AddTaskState extends State<AddTask> {
                         ).then((_){
                           nom_tache.clear();contenu_tache.clear();priorite.clear();couleur.clear();date.clear();
                         });
+                        Navigator.pushNamed(context, '/');
                       }
                     },
                     child: const Padding(

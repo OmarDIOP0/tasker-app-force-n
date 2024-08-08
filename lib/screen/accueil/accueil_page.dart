@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/screen/profile/profile_page.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
+import 'package:intl/intl.dart';
 
 class AccueilPage extends StatefulWidget {
   const AccueilPage({Key? key}) : super(key: key);
@@ -20,24 +22,31 @@ class _AccueilPageState extends State<AccueilPage> {
   String _selectedFilter = 'Nom';
   List<Map<String, dynamic>> _tasks = [];
   List<Map<String, dynamic>> _filteredTasks = [];
-
+  bool _isLoading = true;
+  late final formatDate;
   @override
   void initState() {
     super.initState();
     fetchAndSetTasks();
   }
 
- void fetchAndSetTasks() async {
+  void fetchAndSetTasks() async {
     try{
         List <Map<String,dynamic>> tasks = await fetchTasks();
         setState(() {
-          _tasks = tasks;
-          _filteredTasks = _tasks;
+            _tasks = tasks;
+            _filteredTasks = _tasks;
+            _isLoading = false;
         });
     }
     catch(error){
       print("Error lors du listing des taches $error");
+      _isLoading =false;
     }
+ }
+ String formatDueDate(String dateStr){
+    DateTime date = DateTime.parse(dateStr);
+    return DateFormat('dd MMMM yyyy').format(date);
  }
   void _filterTasks() {
     setState(() {
@@ -118,7 +127,9 @@ class _AccueilPageState extends State<AccueilPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: SingleChildScrollView(
+        child:_isLoading
+            ? const Center(child:CircularProgressIndicator())
+        :SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Column(
@@ -220,8 +231,8 @@ class _AccueilPageState extends State<AccueilPage> {
                             ? Colors.red
                             : task['color'] == 'green'
                             ? lightgreenColor
-                            : Colors.yellow, // Default to yellow if color is null
-                        dateTime: task['dueDate'] ?? 'No Date',
+                            : Colors.yellow,
+                        dateTime: formatDueDate(task['dueDate'] ?? 'No Date') ,
                       ),
                     );
                   }).toList(),

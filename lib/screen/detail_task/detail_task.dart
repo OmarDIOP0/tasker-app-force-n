@@ -84,7 +84,11 @@ class _DetailTaskState extends State<DetailTask> {
                     padding:const EdgeInsets.symmetric(vertical: 10,horizontal: 70),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color:Colors.red
+                        color: widget.couleur == 'red'
+                               ? Colors.red
+                               : widget.couleur == 'green'
+                               ? lightgreenColor
+                               : Colors.yellow
                     ),
                     child: Text(widget.priorite),
                   ),
