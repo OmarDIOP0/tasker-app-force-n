@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/screen/profile/profile_page.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
 
@@ -17,38 +18,27 @@ class _AccueilPageState extends State<AccueilPage> {
   TextEditingController search = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _selectedFilter = 'Nom';
-  List<Map<String, String>> _tasks = [
-    {
-      'nom_tache': 'Design du projet',
-      'contenu': 'Design du projet',
-      'date': '27 Juin 2024',
-      'priorite': 'Élevé',
-      'couleur': 'red',
-    },
-    {
-      'nom_tache': 'Création projet Flutter',
-      'contenu': 'Création projet Flutter',
-      'date': '02 Juillet 2024',
-      'priorite': 'Faible',
-      'couleur': 'green',
-    },
-    {
-      'nom_tache': 'Intégration des interfaces',
-      'contenu': 'Intégration des interfaces',
-      'date': '17 Juillet 2024',
-      'priorite': 'Moyenne',
-      'couleur': 'yellow',
-    },
-  ];
-
-  List<Map<String, String>> _filteredTasks = [];
+  List<Map<String, dynamic>> _tasks = [];
+  List<Map<String, dynamic>> _filteredTasks = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredTasks = _tasks;
+    fetchAndSetTasks();
   }
 
+ void fetchAndSetTasks() async {
+    try{
+        List <Map<String,dynamic>> tasks = await fetchTasks();
+        setState(() {
+          _tasks = tasks;
+          _filteredTasks = _tasks;
+        });
+    }
+    catch(error){
+      print("Error lors du listing des taches $error");
+    }
+ }
   void _filterTasks() {
     setState(() {
       if (search.text.isEmpty) {
@@ -57,15 +47,15 @@ class _AccueilPageState extends State<AccueilPage> {
         _filteredTasks = _tasks.where((task) {
           switch (_selectedFilter) {
             case 'Nom':
-              return task['nom_tache']!
+              return task['title']!
                   .toLowerCase()
                   .contains(search.text.toLowerCase());
             case 'Date':
-              return task['date']!
+              return task['dueDate']!
                   .toLowerCase()
                   .contains(search.text.toLowerCase());
             case 'Priorité':
-              return task['priorite']!
+              return task['priority']!
                   .toLowerCase()
                   .contains(search.text.toLowerCase());
             default:
@@ -216,22 +206,22 @@ class _AccueilPageState extends State<AccueilPage> {
                     return GestureDetector(
                       onTap: () {
                         _navigateToDetail(
-                          task['nom_tache']!,
-                          task['contenu']!,
-                          task['date']!,
-                          task['priorite']!,
-                          task['couleur']!,
+                          task['title'] ?? 'No Title',
+                          task['content'] ?? 'No Content',
+                          task['dueDate'] ?? 'No Date',
+                          task['priority'] ?? 'No Priority',
+                          task['color'] ?? 'yellow', // Default color if null
                         );
                       },
                       child: UICustomContainer(
-                        projetName: task['nom_tache']!,
-                        niveau: task['priorite']!,
-                        color: task['couleur'] == 'red'
+                        projetName: task['title'] ?? 'No Title',
+                        niveau: task['priority'] ?? 'No Priority',
+                        color: task['color'] == 'red'
                             ? Colors.red
-                            : task['couleur'] == 'green'
+                            : task['color'] == 'green'
                             ? lightgreenColor
-                            : Colors.yellow,
-                        dateTime: task['date']!,
+                            : Colors.yellow, // Default to yellow if color is null
+                        dateTime: task['dueDate'] ?? 'No Date',
                       ),
                     );
                   }).toList(),

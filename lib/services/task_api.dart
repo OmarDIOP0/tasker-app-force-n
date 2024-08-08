@@ -25,8 +25,19 @@ Future <void> addTask (BuildContext context,
       final jsonResponse = jsonDecode(response.body);
       showSnackBar(context, 'Tache "${jsonResponse['title']}" creer avec success !',backgroundColor: lightgreenColor);
    }
-   else{
-      showSnackBar(context, 'Erreur de Tache  !',backgroundColor: Colors.redAccent);
+   else {
+      showSnackBar(
+          context, 'Erreur de Tache  !', backgroundColor: Colors.redAccent);
    }
-   
+}
+
+Future <List<Map<String,dynamic>>> fetchTasks() async {
+   final response = await http.get(Uri.parse("$url/task"));
+   if(response.statusCode ==200){
+      List<dynamic> tasksJson = jsonDecode(response.body);
+      return List<Map<String,dynamic>>.from(tasksJson);
+   }
+   else{
+      throw Exception('Echec lors de la recuperation de la liste des tache');
+   }
 }
