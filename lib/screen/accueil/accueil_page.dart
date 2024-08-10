@@ -75,11 +75,12 @@ class _AccueilPageState extends State<AccueilPage> {
     });
   }
 
-  void _navigateToDetail(String nom_tache, String contenu, String date, String priorite, String couleur) {
+  void _navigateToDetail(int id,String nom_tache, String contenu, String date, String priorite, String couleur) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DetailTask(
+          id: id,
           nom_tache: nom_tache,
           contenu: contenu,
           date: date,
@@ -217,6 +218,7 @@ class _AccueilPageState extends State<AccueilPage> {
                     return GestureDetector(
                       onTap: () {
                         _navigateToDetail(
+                          task['id'] ?? 'No Id',
                           task['title'] ?? 'No Title',
                           task['content'] ?? 'No Content',
                           task['dueDate'] ?? 'No Date',

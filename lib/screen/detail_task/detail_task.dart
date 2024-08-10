@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
 class DetailTask extends StatefulWidget {
+  final int id;
   final String nom_tache;
   final String contenu;
   final String date;
   final String priorite;
   final String couleur;
-  const DetailTask({Key? key, required this.nom_tache, required this.contenu, required this.date, required this.priorite, required this.couleur}) : super(key: key);
+  const DetailTask({Key? key,required this.id, required this.nom_tache, required this.contenu, required this.date, required this.priorite, required this.couleur}) : super(key: key);
 
   @override
   State<DetailTask> createState() => _DetailTaskState();
@@ -64,7 +67,7 @@ class _DetailTaskState extends State<DetailTask> {
               ),
               const SizedBox(height: 30),
               UICustumProfileForm(
-                value: 'Modification :${widget.date}',
+                value: 'Modification : ${widget.date}',
                 comment: "Modification de la tache",
                 icon: const Icon(Icons.date_range),
               ),
@@ -92,6 +95,24 @@ class _DetailTaskState extends State<DetailTask> {
                     ),
                     child: Text(widget.priorite),
                   ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(onPressed: (){},
+                      icon: const Icon(Icons.share)
+                  ),
+                  IconButton(onPressed: (){
+                    updateTask(context,widget.id, widget.nom_tache, widget.contenu, widget.priorite, widget.couleur, widget.date);
+                    Navigator.pushNamed(context, '/');
+                  },
+                      icon: const Icon(Icons.edit)),
+                  IconButton(onPressed: (){
+                    deleteTask(context, widget.id);
+                    Navigator.pushNamed(context, '/');
+                    }, icon:const Icon(Icons.delete))
                 ],
               )
             ],
