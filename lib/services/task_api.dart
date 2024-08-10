@@ -40,6 +40,14 @@ Future <List<Map<String,dynamic>>> fetchTasks() async {
       throw Exception('Echec lors de la recuperation de la liste des tache');
    }
 }
+Future<Map<String, dynamic>> fetchTaskById(int id) async {
+   final response = await http.get(Uri.parse("$url/task/$id"));
+   if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+   } else {
+      throw Exception('Échec lors de la récupération de la tâche');
+   }
+}
 
 
 Future<void> updateTask(BuildContext context,
