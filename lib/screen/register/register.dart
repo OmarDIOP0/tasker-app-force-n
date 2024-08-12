@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/login/login.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/custom_appbar_clipper.dart';
 import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_password_field.dart';
+import 'package:tasker/widget/ui_custom_profile_form.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -20,9 +22,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
+  TextEditingController prenom = TextEditingController();
+  TextEditingController nom = TextEditingController();
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController photo = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +52,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   children: [
                     UICustomForm(
+                      controller: prenom,
+                      nameField:"Prenom" ,
+                      comment: "Prenom",
+                      icon: const Icon(Icons.person),
+                    ),
+                    const SizedBox(height: 10),
+                    UICustomForm(
+                      controller: nom,
+                      nameField:"Nom" ,
+                      comment: "Nom",
+                      icon: const Icon(Icons.person),
+                    ),
+                    const SizedBox(height: 10),
+                    UICustomForm(
                       controller: username,
                       nameField:"Nom Utilisateur" ,
                       comment: "Nom utilisateur",
@@ -65,6 +84,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         nameField: "Password",
                         comment: "password"
                     ),
+                    const SizedBox(height: 10),
+                    UICustumProfileForm(
+                        value: photo.text,
+                        comment: "Photo",
+                        icon: const Icon(Icons.person)
+                    ),
                     const SizedBox(height: 15),
                     ElevatedButton(
                         style: ButtonStyle(
@@ -75,8 +100,15 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         onPressed: (){
                           if(_formKey.currentState!.validate()){
-                            showSnackBar(context, "User add Successfully",backgroundColor: lightgreenColor);
-                            Navigator.pushNamed(context, '/login');
+                            register(context,
+                                prenom.text,
+                                nom.text,
+                                email.text,
+                                password.text,
+                                username.text,
+                                photo.text
+                            );
+
                           }
                           else{
                             showSnackBar(context, "Erreur lors de la validation du formulaire",backgroundColor: Colors.red);

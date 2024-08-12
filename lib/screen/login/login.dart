@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/register/register.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
@@ -17,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _keyForm =  GlobalKey<FormState>();
   
-  TextEditingController email = TextEditingController();
+  TextEditingController username = TextEditingController();
   TextEditingController password  = TextEditingController();
   
   @override
@@ -40,10 +41,10 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   UICustomForm(
-                      controller: email,
-                      nameField: "Email",
-                      comment: "email",
-                      icon: const Icon(Icons.email)
+                      controller: username,
+                      nameField: "Username",
+                      comment: "username",
+                      icon: const Icon(Icons.account_circle)
                   ),
                   const SizedBox(height: 10),
                   UICustomPasswordField(
@@ -61,8 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: (){
                         if(_keyForm.currentState!.validate()){
-                          showSnackBar(context, "Login Successfully",backgroundColor: lightgreenColor);
-                          Navigator.pushNamed(context, '/');
+                          login(context, username.text, password.text);
                         }
                         else{
                           showSnackBar(context, "Erreur lors de la validation du formulaire",backgroundColor: Colors.red);

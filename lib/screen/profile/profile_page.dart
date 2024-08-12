@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tasker/constantes/colors.dart';
+import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
 import 'package:tasker/widget/ui_custom_profile_password.dart';
+import 'package:http/http.dart' as http;
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -10,6 +14,30 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late String _profileInfo = 'loading...';
+
+  Future<void> _fetchProfile() async {
+    String?token= await storage.read(key: 'token');
+    final response = await http.put(Uri.parse("$url/auths/profils"),
+        headers: {'Authorization': 'Bearer $token'}
+    );
+    print("Response $response");
+    if (response.statusCode == 200) {
+      setState(() {
+        _profileInfo = jsonDecode(response.body);
+      });
+    }
+    else {
+      setState(() {
+        _profileInfo = 'Impossible de recuperer le profile';
+      });
+    }
+  }
+  @override
+  void initState(){
+    super.initState();
+    _fetchProfile();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +70,17 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               const SizedBox(height: 50),
+              Center(child: Text(_profileInfo),),
+              const UICustumProfileForm(
+                  value: "Omar",
+                  comment: "prenom",
+                  icon: Icon(Icons.person)
+              ),
+              const UICustumProfileForm(
+                  value: "DIOP",
+                  comment: "nom",
+                  icon: Icon(Icons.person)
+              ),
               const UICustumProfileForm(
                   value: "Omar DIOP",
                   comment: "utilisateur",

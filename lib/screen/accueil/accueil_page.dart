@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/screen/profile/profile_page.dart';
@@ -75,8 +76,8 @@ class _AccueilPageState extends State<AccueilPage> {
     });
   }
 
-  void _navigateToDetail(int id,String nom_tache, String contenu, String date, String priorite, String couleur) {
-    Navigator.push(
+  Future<void> _navigateToDetail(int id, String nom_tache, String contenu, String date, String priorite, String couleur) async {
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DetailTask(
@@ -89,6 +90,11 @@ class _AccueilPageState extends State<AccueilPage> {
         ),
       ),
     );
+
+    if (result == true) {
+      fetchAndSetTasks(); // Recharger les tâches si une mise à jour a eu lieu
+    }
+
   }
 
   @override
@@ -276,7 +282,9 @@ class _AccueilPageState extends State<AccueilPage> {
             ListTile(
               leading: const Icon(Icons.share),
               title: const Text("Partager"),
-              onTap: () {},
+              onTap: () {
+                Share.share("TASKER APPLICATION");
+              },
             ),
             ListTile(
               leading: const Icon(Icons.settings),
@@ -292,7 +300,8 @@ class _AccueilPageState extends State<AccueilPage> {
               leading: const Icon(Icons.logout),
               title: const Text("Déconnexion"),
               onTap: () {
-
+                logout();
+                Navigator.pushNamed(context, '/login');
               },
             ),
           ],
