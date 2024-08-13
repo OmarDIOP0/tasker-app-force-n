@@ -220,7 +220,7 @@ class _AccueilPageState extends State<AccueilPage> {
                 ),
                 const SizedBox(height: 15),
                 Column(
-                  children: _filteredTasks.map((task) {
+                  children:_filteredTasks.map((task) {
                     return GestureDetector(
                       onTap: () {
                         _navigateToDetail(

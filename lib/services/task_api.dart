@@ -4,9 +4,10 @@ import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:tasker/screen/profile/profile_page.dart';
 import '../constantes/colors.dart';
 import '../widget/scaffold_message.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 const url = 'http://127.0.0.1:3000';
 
@@ -189,15 +190,19 @@ Future<void> updateUser(
    };
 
    try {
+      String? token = await storage.read(key: 'token');
       final response = await http.put(
          Uri.parse("$url/auths/profils"),
-         headers: {"Content-Type": "application/json"},
+         headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
          body: jsonEncode(updateUserData),
       );
 
       if (response.statusCode == 200) {
          final jsonResponse = jsonDecode(response.body);
+         print('Updated user info: $jsonResponse');
          showSnackBar(context, 'Profil mise à jour avec succès', backgroundColor: lightgreenColor,);
+         await getUserProfile();
+         Navigator.pushNamed(context, '/');
       } else {
          showSnackBar(context, 'Erreur lors de la mise à jour du profil', backgroundColor: Colors.redAccent,);
       }
@@ -206,4 +211,19 @@ Future<void> updateUser(
       showSnackBar(context, 'Erreur de réseau !', backgroundColor: Colors.redAccent,);
    }
 }
+
+Future<Map<String,dynamic>> getUserProfile() async {
+   String? token = await storage.read(key: 'token');
+   final response = await http.get(Uri.parse("$url/auths/profils"),
+   headers: {"Content-Type":"application/json","Authorization": "Bearer $token"},
+   );
+   if (response.statusCode==200){
+      return jsonDecode(response.body);
+   }
+   else{
+      throw Exception("Echec lors de la recuperation des info de l'utilisateur");
+   }
+}
+
+
 

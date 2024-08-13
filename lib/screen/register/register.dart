@@ -11,6 +11,7 @@ import 'package:tasker/widget/ui_appbar_form.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_password_field.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
+import 'package:tasker/widget/ui_custom_register_form.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -51,19 +52,28 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
 
                   children: [
-                    UICustomForm(
-                      controller: prenom,
-                      nameField:"Prenom" ,
-                      comment: "Prenom",
-                      icon: const Icon(Icons.person),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: UICustumRegisterForm(
+                            prenom,
+                            "Prénom",
+                            "Prénom",
+                            const Icon(Icons.person),
+                          ),
+                        ),
+                        const SizedBox(width: 10), // Espace entre les deux champs
+                        Expanded(
+                          child: UICustumRegisterForm(
+                            nom,
+                            "Nom",
+                            "Nom",
+                            const Icon(Icons.person),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    UICustomForm(
-                      controller: nom,
-                      nameField:"Nom" ,
-                      comment: "Nom",
-                      icon: const Icon(Icons.person),
-                    ),
+
                     const SizedBox(height: 10),
                     UICustomForm(
                       controller: username,

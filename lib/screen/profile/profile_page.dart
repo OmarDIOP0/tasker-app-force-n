@@ -6,6 +6,8 @@ import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
 import 'package:tasker/widget/ui_custom_profile_password.dart';
 import 'package:http/http.dart' as http;
+
+import '../../widget/scaffold_message.dart';
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -14,37 +16,34 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late String _profileInfo = 'loading...';
+  Map<String,dynamic>? _userinfo;
 
-  Future<void> _fetchProfile() async {
-    String?token= await storage.read(key: 'token');
-    final response = await http.put(Uri.parse("$url/auths/profils"),
-        headers: {'Authorization': 'Bearer $token'}
-    );
-    print("Response $response");
-    if (response.statusCode == 200) {
-      setState(() {
-        _profileInfo = jsonDecode(response.body);
-      });
-    }
-    else {
-      setState(() {
-        _profileInfo = 'Impossible de recuperer le profile';
-      });
-    }
-  }
   @override
   void initState(){
     super.initState();
-    _fetchProfile();
+    fetchProfile();
   }
+  Future<void> fetchProfile() async {
+    try {
+      final userInfo = await getUserProfile();
+      setState(() {
+        _userinfo = userInfo;
+      });
+    } catch (e) {
+      showSnackBar(context, "Erreur lors de la récupération des informations.", backgroundColor: Colors.redAccent);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(200),
           child: AppBar(
-            title:const Text('Omar DIOP',style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold),),
+            title:_userinfo== null
+                ?Center(child: CircularProgressIndicator())
+                :Text("${_userinfo!['prenom']} ${_userinfo!['nom']}",style: TextStyle(color: Colors.white,fontSize: 30,fontWeight: FontWeight.bold),),
             centerTitle: true,
             automaticallyImplyLeading: false,
             backgroundColor: verylightgreenColor,
@@ -66,43 +65,58 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        body: _userinfo == null
+            ? Center(child: CircularProgressIndicator())
+            :SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 50),
-              Center(child: Text(_profileInfo),),
-              const UICustumProfileForm(
-                  value: "Omar",
-                  comment: "prenom",
-                  icon: Icon(Icons.person)
-              ),
-              const UICustumProfileForm(
-                  value: "DIOP",
-                  comment: "nom",
-                  icon: Icon(Icons.person)
-              ),
-              const UICustumProfileForm(
-                  value: "Omar DIOP",
+               Row(
+                 children: [
+                   Expanded(child:UICustumProfileForm(
+                       value: "${_userinfo!['prenom']}",
+                       comment: "prenom",
+                       icon: Icon(Icons.person)
+                   ),
+                   ),
+                   Expanded(child:UICustumProfileForm(
+                       value: "${_userinfo!['nom']}",
+                       comment: "nom",
+                       icon: Icon(Icons.person)
+                   ),
+                   ),
+                 ],
+               ),
+              const SizedBox(height: 20),
+              UICustumProfileForm(
+                  value: "${_userinfo!['username']}",
                   comment: "utilisateur",
                   icon: Icon(Icons.person)
               ),
               const SizedBox(height: 20),
-              const UICustumProfileForm(
-                  value: "odiop@gmail.com",
+              UICustumProfileForm(
+                  value: "${_userinfo!['email']}",
                   comment: "email",
                   icon: Icon(Icons.mail)
               ),
               const SizedBox(height: 20),
-              const UICustomProfilePassword(
-                  password: "omardiop1234"
+              UICustomProfilePassword(
+                  password: "${_userinfo!['password']}"
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: lightgreenColor
+                    primary: lightgreenColor
                 ),
                 onPressed: (){
-                  print("modifier");
+                  updateUser(context,
+                      _userinfo!['prenom'],
+                      _userinfo!['nom'],
+                      _userinfo!['email'],
+                      _userinfo!['password'],
+                      _userinfo!['username'],
+                      _userinfo!['photo']
+                  );
                 },
                 child: const Padding(
                   padding:EdgeInsets.all(10),
