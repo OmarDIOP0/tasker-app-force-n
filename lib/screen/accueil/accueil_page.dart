@@ -7,6 +7,7 @@ import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/screen/profile/profile_page.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
+import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
 import 'package:intl/intl.dart';
 
@@ -25,10 +26,24 @@ class _AccueilPageState extends State<AccueilPage> {
   List<Map<String, dynamic>> _filteredTasks = [];
   bool _isLoading = true;
   late final formatDate;
+  Map<String,dynamic>? _userinfo;
+
   @override
   void initState() {
     super.initState();
     fetchAndSetTasks();
+    fetchProfile();
+  }
+
+  Future<void> fetchProfile() async {
+    try {
+      final userInfo = await getUserProfile();
+      setState(() {
+        _userinfo = userInfo;
+      });
+    } catch (e) {
+      showSnackBar(context, "Erreur lors de la récupération des informations.", backgroundColor: Colors.redAccent);
+    }
   }
 
   void fetchAndSetTasks() async {
@@ -92,7 +107,7 @@ class _AccueilPageState extends State<AccueilPage> {
     );
 
     if (result == true) {
-      fetchAndSetTasks(); // Recharger les tâches si une mise à jour a eu lieu
+      fetchAndSetTasks();
     }
 
   }
@@ -144,9 +159,14 @@ class _AccueilPageState extends State<AccueilPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                const Text('Hello ! '),
-                const SizedBox(height: 10),
-                const Text('Omar DIOP', style: TextStyle(fontSize: 15)),
+                _userinfo== null
+                    ?Center(child: CircularProgressIndicator())
+                    :Row(
+                  children: [
+                    const Text("Hello ! "),
+                    Text("${_userinfo!['prenom']} ${_userinfo!['nom']}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                  ],
+                ),
                 const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 1.0),

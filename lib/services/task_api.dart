@@ -88,7 +88,6 @@ Future<void> updateTask(
       'color': color,
       'dueDate': dueDate,
    };
-
    try {
       String?token= await storage.read(key: 'token');
       final response = await http.patch(
@@ -142,7 +141,7 @@ Future<void> register(BuildContext context,
    }
 }
 Future<void> login(BuildContext context,
-    String username,
+       String username,
     String password) async{
    final response = await http.post(Uri.parse("$url/auths/login"),
       headers: {'Content-Type':'application/json'},
