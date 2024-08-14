@@ -98,7 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     UICustumProfileForm(
                         value: photo.text,
                         comment: "Photo",
-                        icon: const Icon(Icons.person)
+                        icon: const Icon(Icons.person), onSaved: (value) {photo.text=value!; },
                     ),
                     const SizedBox(height: 15),
                     ElevatedButton(

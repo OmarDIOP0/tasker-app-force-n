@@ -198,10 +198,6 @@ Future<void> updateUser(
 
       if (response.statusCode == 200) {
          final jsonResponse = jsonDecode(response.body);
-         print('Updated user info: $jsonResponse');
-         showSnackBar(context, 'Profil mise à jour avec succès', backgroundColor: lightgreenColor,);
-         await getUserProfile();
-         Navigator.pushNamed(context, '/');
       } else {
          showSnackBar(context, 'Erreur lors de la mise à jour du profil', backgroundColor: Colors.redAccent,);
       }

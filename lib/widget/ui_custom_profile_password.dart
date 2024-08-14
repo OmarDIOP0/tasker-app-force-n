@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class UICustomProfilePassword extends StatefulWidget {
   final String password;
-  const UICustomProfilePassword({Key? key, required this.password}) : super(key: key);
+  const UICustomProfilePassword({Key? key, required this.password, required Function(dynamic value) onSaved}) : super(key: key);
 
   @override
   State<UICustomProfilePassword> createState() => _UICustomProfilePasswordState();

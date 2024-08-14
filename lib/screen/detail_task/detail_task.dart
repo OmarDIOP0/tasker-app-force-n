@@ -154,19 +154,21 @@ class _DetailTaskState extends State<DetailTask> {
                 UICustumProfileForm(
                   value: 'Création : ${formatDueDate(taskDetails!['createdAt'] ?? '')}',
                   comment: "Création de la tâche",
-                  icon: const Icon(Icons.date_range),
+                  icon: const Icon(Icons.date_range), onSaved: (value ) { taskDetails!['createdAt']=value!; },
                 ),
                 const SizedBox(height: 30),
                 UICustumProfileForm(
                   value: 'Modification : ${formatDueDate(taskDetails!['updatedAt'] ?? '')}',
                   comment: "Modification de la tâche",
-                  icon: const Icon(Icons.date_range),
+                  icon: const Icon(Icons.date_range), onSaved: (newValue) { taskDetails!['updatedAt']=newValue!;  },
                 ),
                 const SizedBox(height: 30),
                 UICustumProfileForm(
                   value: _color,
                   comment: "Couleur de la tâche",
-                  icon: const Icon(Icons.color_lens),
+                  icon: const Icon(Icons.color_lens), onSaved: (value) {
+                    _color=value!;
+                },
                 ),
                 const SizedBox(height: 30),
                 Row(
