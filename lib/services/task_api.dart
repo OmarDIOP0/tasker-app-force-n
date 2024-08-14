@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:tasker/screen/profile/profile_page.dart';
 import '../constantes/colors.dart';
 import '../widget/scaffold_message.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+import 'database_helper.dart';
+
 
 const url = 'http://127.0.0.1:3000';
 
@@ -37,25 +36,32 @@ Future <void> addTask (BuildContext context,
    }
 }
 
-Future <List<Map<String,dynamic>>> fetchTasks() async {
-   String?token= await storage.read(key: 'token');
-   if (token == null) {
-      throw Exception('Token non trouvé, l\'utilisateur n\'est peut-être pas connecté.');
-   }
-   final response = await http.get(Uri.parse("$url/task"),
-   headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-   }
-   );
-   if(response.statusCode ==200){
-      List<dynamic> tasksJson = jsonDecode(response.body);
-      return List<Map<String,dynamic>>.from(tasksJson);
-   }
-   else{
-      throw Exception('Echec lors de la recuperation de la liste des tache');
+
+Future<List<Map<String, dynamic>>> fetchTasks() async {
+   String? token = await storage.read(key: 'token');
+   final dbHelper = DatabaseHelper();
+
+   try {
+      final response = await http.get(Uri.parse("$url/task"),
+          headers: {
+             "Content-Type": "application/json",
+             "Authorization": "Bearer $token",
+          });
+
+      if (response.statusCode == 200) {
+         List<dynamic> tasksJson = jsonDecode(response.body);
+         for (var task in tasksJson) {
+            await dbHelper.insertTask(task);
+         }
+         return List<Map<String, dynamic>>.from(tasksJson);
+      } else {
+         throw Exception('Échec lors de la récupération de la liste des tâches');
+      }
+   } catch (e) {
+      return await dbHelper.getTasks();
    }
 }
+
 Future<Map<String, dynamic>> fetchTaskById(int id) async {
    String?token= await storage.read(key: 'token');
    final response = await http.get(Uri.parse("$url/task/$id"),
@@ -112,10 +118,12 @@ Future<void> updateTask(
 
 Future<void> deleteTask(BuildContext context,int id) async{
    String?token= await storage.read(key: 'token');
+   final dbHelper = DatabaseHelper();
    final response = await http.delete(Uri.parse("$url/task/$id"),
       headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
    );
    if(response.statusCode == 200){
+      dbHelper.deleteTask(id);
       showSnackBar(context, 'Tâche supprimée avec succès!', backgroundColor: Colors.redAccent);
    }else{
       showSnackBar(context, 'Erreur lors de la suppression de la tâche!', backgroundColor: Colors.redAccent);

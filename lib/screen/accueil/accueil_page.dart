@@ -5,6 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
 import 'package:tasker/screen/profile/profile_page.dart';
+import 'package:tasker/services/database_helper.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/scaffold_message.dart';
@@ -22,6 +23,7 @@ class _AccueilPageState extends State<AccueilPage> {
   TextEditingController search = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _selectedFilter = 'Nom';
+  late DatabaseHelper _dbHelper;
   List<Map<String, dynamic>> _tasks = [];
   List<Map<String, dynamic>> _filteredTasks = [];
   bool _isLoading = true;
@@ -33,6 +35,7 @@ class _AccueilPageState extends State<AccueilPage> {
     super.initState();
     fetchAndSetTasks();
     fetchProfile();
+    _dbHelper = DatabaseHelper();
   }
 
   Future<void> fetchProfile() async {
@@ -49,6 +52,8 @@ class _AccueilPageState extends State<AccueilPage> {
   void fetchAndSetTasks() async {
     try{
         List <Map<String,dynamic>> tasks = await fetchTasks();
+        List tasksFromDB = await _dbHelper.getTasks();
+        print("From DB $tasksFromDB");
         setState(() {
             _tasks = tasks;
             _filteredTasks = _tasks;
