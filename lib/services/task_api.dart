@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +7,7 @@ import '../widget/scaffold_message.dart';
 import 'database_helper.dart';
 
 
-const url = 'http://127.0.0.1:3000';
+const url = 'http://192.168.1.3:3000';
 
 const storage =  FlutterSecureStorage();
 

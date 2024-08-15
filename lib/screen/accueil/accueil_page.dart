@@ -154,9 +154,11 @@ class _AccueilPageState extends State<AccueilPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child:_isLoading
-            ? const Center(child:CircularProgressIndicator())
-        :SingleChildScrollView(
+        child:
+        //_isLoading
+          //  ? const Center(child:CircularProgressIndicator())
+        //:
+        SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Column(
