@@ -1,14 +1,15 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-//import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'NotificationModel.dart';
 
-class DatabaseHelper{
+class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
-  static Database ? _database;
+  static Database? _database;
 
-  factory DatabaseHelper(){
+  factory DatabaseHelper() {
     return _instance;
   }
+
   DatabaseHelper._internal();
 
   Future<Database> get database async {
@@ -18,37 +19,68 @@ class DatabaseHelper{
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(),'tasker.db');
+    String path = join(await getDatabasesPath(), 'tasker.db');
     return await openDatabase(
-        path,
+      path,
       version: 1,
-      onCreate: (db,version){
-          return db.execute(
-            "CREATE TABLE tasks("
-                "id INTEGER PRIMARY KEY,"
-                "title TEXT,"
-                "content TEXT,"
-                "priority TEXT,"
-                "color TEXT,"
-                "dueDate TEXT,"
-                "createdAt TEXT,"
-                "updatedAt TEXT,"
-                "userId INTEGER"
-                ")",
-          );
-      },
+      onCreate: _onCreate,
     );
   }
-  Future<void> insertTask(Map<String,dynamic> task) async{
-    final db = await database;
-    await db.insert('tasks', task,conflictAlgorithm: ConflictAlgorithm.replace);
+
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE tasks(
+        id INTEGER PRIMARY KEY,
+        title TEXT,
+        content TEXT,
+        priority TEXT,
+        color TEXT,
+        dueDate TEXT,
+        createdAt TEXT,
+        updatedAt TEXT,
+        userId INTEGER
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE notifications(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT,
+        body TEXT,
+        scheduledTime TEXT
+      )
+    ''');
   }
-  Future<List<Map<String,dynamic>>> getTasks() async {
+
+  Future<void> insertTask(Map<String, dynamic> task) async {
+    final db = await database;
+    await db.insert('tasks', task, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<Map<String, dynamic>>> getTasks() async {
     final db = await database;
     return await db.query('tasks');
   }
+
   Future<void> deleteTask(int id) async {
     final db = await database;
-    await db.delete('tasks',where: "id = ?",whereArgs: [id]);
+    await db.delete('tasks', where: "id = ?", whereArgs: [id]);
+  }
+
+  Future<int> insertNotification(NotificationModel notification) async {
+    final db = await database;
+    return await db.insert('notifications', notification.toMap());
+  }
+
+  Future<List<NotificationModel>> getNotifications() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('notifications');
+    return List.generate(maps.length, (index) {
+      return NotificationModel.fromMap(maps[index]);
+    });
+  }
+
+  Future<void> deleteNotification(int id) async {
+    final db = await database;
+    await db.delete('notifications', where: "id = ?", whereArgs: [id]);
   }
 }

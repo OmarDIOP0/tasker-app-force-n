@@ -32,7 +32,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
           controller: _tabController,
             tabs: const [
               Tab(icon: Icon(Icons.all_inbox),text: "Toutes"),
-              Tab(icon: Icon(Icons.read_more),text: "Non Lues",)
+              //Tab(icon: Icon(Icons.read_more),text: "Non Lues",)
             ]
         ),
       ),
@@ -40,7 +40,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         controller: _tabController,
         children: const [
           AllNotification(),
-          NoReadNotification(),
+          //NoReadNotification(),
         ],
       ),
     );

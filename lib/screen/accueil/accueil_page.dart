@@ -43,17 +43,16 @@ class _AccueilPageState extends State<AccueilPage> {
       final userInfo = await getUserProfile();
       setState(() {
         _userinfo = userInfo;
+        _isLoading = false;
       });
     } catch (e) {
+      _isLoading = false;
       showSnackBar(context, "Erreur lors de la récupération des informations.", backgroundColor: Colors.redAccent);
     }
   }
-
   void fetchAndSetTasks() async {
     try{
         List <Map<String,dynamic>> tasks = await fetchTasks();
-        List tasksFromDB = await _dbHelper.getTasks();
-        print("From DB $tasksFromDB");
         setState(() {
             _tasks = tasks;
             _filteredTasks = _tasks;
@@ -154,11 +153,9 @@ class _AccueilPageState extends State<AccueilPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child:
-        //_isLoading
-          //  ? const Center(child:CircularProgressIndicator())
-        //:
-        SingleChildScrollView(
+        child: _tasks==null
+          ? const Center(child:CircularProgressIndicator())
+            : SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Column(
@@ -166,12 +163,12 @@ class _AccueilPageState extends State<AccueilPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                _userinfo== null
+                  _isLoading
                     ?Center(child: CircularProgressIndicator())
                     :Row(
                   children: [
                     const Text("Hello ! "),
-                    Text("${_userinfo!['prenom']} ${_userinfo!['nom']}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                    Text("${_userinfo?['prenom']} ${_userinfo?['nom']}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -289,13 +286,13 @@ class _AccueilPageState extends State<AccueilPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
                 color: deepgreenColor,
               ),
-              accountName: Text("Omar DIOP"),
-              accountEmail: Text("omardiop@gmail.com"),
-              currentAccountPicture: CircleAvatar(
+              accountName: _isLoading == true ? const SingleChildScrollView(): Text("${_userinfo?['prenom']} ${_userinfo?['nom']}"),
+              accountEmail: _isLoading == true ? const SingleChildScrollView():Text("${_userinfo?['email']}"),
+              currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
               ),
             ),

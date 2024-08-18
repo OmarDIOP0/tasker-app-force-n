@@ -60,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
           title: _userinfo == null
               ? Center(child: CircularProgressIndicator())
               : Text(
-            "${_userinfo!['prenom']} ${_userinfo!['nom']}",
+            "${_userinfo?['prenom']} ${_userinfo?['nom']}",
             style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,

@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           },
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: _childreenPage[_currentIndex],
       bottomNavigationBar:BottomNavigationBar(
             unselectedItemColor: Colors.white,

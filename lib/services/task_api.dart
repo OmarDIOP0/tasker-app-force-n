@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:tasker/main.dart';
+import 'package:tasker/services/NotificationModel.dart';
 import '../constantes/colors.dart';
 import '../widget/scaffold_message.dart';
 import 'database_helper.dart';
@@ -10,6 +12,7 @@ import 'database_helper.dart';
 const url = 'http://192.168.1.3:3000';
 
 const storage =  FlutterSecureStorage();
+final dbHelper = DatabaseHelper();
 
 Future <void> addTask (BuildContext context,
     String title,String content,String priority,String color,String dueDate) async
@@ -28,6 +31,15 @@ Future <void> addTask (BuildContext context,
    );
    if (response.statusCode == 201){
       final jsonResponse = jsonDecode(response.body);
+      int taskId = jsonResponse['id'];
+      DateTime parsedDueDate = DateTime.parse(dueDate);
+      await scheduleNotification(taskId, "Tâche créée", "La tâche '${jsonResponse['title']}' a été créée avec succès", DateTime.now().add(Duration(seconds: 5)));
+      await scheduleNotification(taskId + 1000, "Échéance de la tâche", "La tâche '${jsonResponse['title']}' est arrivée à échéance", parsedDueDate);
+      await dbHelper.insertNotification(NotificationModel(
+          id:taskId,
+          title:"Tache",
+          body: "La tâche '${jsonResponse['title']}' a été créée avec succès",
+          scheduledTime: DateTime.now()));
       showSnackBar(context, 'Tache "${jsonResponse['title']}" creer avec success !',backgroundColor: lightgreenColor);
    }
    else {
@@ -38,7 +50,6 @@ Future <void> addTask (BuildContext context,
 
 Future<List<Map<String, dynamic>>> fetchTasks() async {
    String? token = await storage.read(key: 'token');
-   final dbHelper = DatabaseHelper();
 
    try {
       final response = await http.get(Uri.parse("$url/task"),
@@ -123,6 +134,10 @@ Future<void> deleteTask(BuildContext context,int id) async{
    );
    if(response.statusCode == 200){
       dbHelper.deleteTask(id);
+      await flutterLocalNotificationsPlugin.cancel(id);
+      await flutterLocalNotificationsPlugin.cancel(id+1000);
+      await scheduleNotification(id, "Tâche créée", "La tâche a été supprimée avec succès", DateTime.now().add(Duration(seconds: 5)));
+      dbHelper.deleteNotification(id);
       showSnackBar(context, 'Tâche supprimée avec succès!', backgroundColor: Colors.redAccent);
    }else{
       showSnackBar(context, 'Erreur lors de la suppression de la tâche!', backgroundColor: Colors.redAccent);
@@ -215,16 +230,16 @@ Future<void> updateUser(
 }
 
 Future<Map<String,dynamic>> getUserProfile() async {
-   String? token = await storage.read(key: 'token');
-   final response = await http.get(Uri.parse("$url/auths/profils"),
-   headers: {"Content-Type":"application/json","Authorization": "Bearer $token"},
-   );
-   if (response.statusCode==200){
-      return jsonDecode(response.body);
-   }
-   else{
-      throw Exception("Echec lors de la recuperation des info de l'utilisateur");
-   }
+      String? token = await storage.read(key: 'token');
+      final response = await http.get(Uri.parse("$url/auths/profils"),
+      headers: {"Content-Type":"application/json","Authorization": "Bearer $token"},
+      );
+      if (response.statusCode==200){
+         return jsonDecode(response.body);
+      }
+      else{
+         throw Exception("Echec lors de la recuperation des info de l'utilisateur");
+      }
 }
 
 
