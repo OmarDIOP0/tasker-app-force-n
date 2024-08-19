@@ -7,15 +7,11 @@ class ApplicationName extends StatelessWidget {
   final double size;
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Icon(Icons.task_alt,size: size ,color:deepgreenColor),
-          ),
-          const SizedBox(width: 10,),
-          const Text('Tasker',style:TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: deepgreenColor,)),
+          SizedBox(width: 10,),
+          Text('Tasker',style:TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: deepgreenColor,)),
         ]
     );
   }

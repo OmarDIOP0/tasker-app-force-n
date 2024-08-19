@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/detail_task/detail_task.dart';
@@ -10,7 +11,6 @@ import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/application_name.dart';
 import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_custom_container.dart';
-import 'package:intl/intl.dart';
 
 class AccueilPage extends StatefulWidget {
   const AccueilPage({Key? key}) : super(key: key);
@@ -29,12 +29,18 @@ class _AccueilPageState extends State<AccueilPage> {
   bool _isLoading = true;
   late final formatDate;
   Map<String,dynamic>? _userinfo;
+  Future<void> _requestPermissions() async {
+    if (await Permission.notification.isDenied) {
+      await Permission.notification.request();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     fetchAndSetTasks();
     fetchProfile();
+    _requestPermissions();
     _dbHelper = DatabaseHelper();
   }
 
@@ -132,19 +138,20 @@ class _AccueilPageState extends State<AccueilPage> {
             },
           ),
         ),
-        title: const ApplicationName(size: 20),
+        title: const ApplicationName(size: 15),
         actions: [
           IconButton(onPressed: (){
             Navigator.pushNamed(context, '/notification');
           },
-              icon: const Icon(Icons.notifications_active_outlined,size: 30,)
+              icon: const Icon(Icons.notifications_active_outlined,size: 25,)
           ),
           const SizedBox(width: 10),
         ],
         centerTitle: true,
         backgroundColor: verylightgreenColor,
       ),
-      body: Container(
+      body:
+      Container(
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -164,7 +171,7 @@ class _AccueilPageState extends State<AccueilPage> {
               children: [
                 const SizedBox(height: 10),
                   _isLoading
-                    ?Center(child: CircularProgressIndicator())
+                    ?const Center(child: CircularProgressIndicator())
                     :Row(
                   children: [
                     const Text("Hello ! "),
@@ -274,6 +281,15 @@ class _AccueilPageState extends State<AccueilPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: "Ajouté une tache",
+        elevation: 10,
+        onPressed:(){
+          Navigator.pushNamed(context, '/add-task');
+        },
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       drawer: Drawer(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(

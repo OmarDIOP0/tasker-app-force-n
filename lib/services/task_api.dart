@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:tasker/main.dart';
 import 'package:tasker/services/NotificationModel.dart';
+import 'package:tasker/services/notification_service.dart';
 import '../constantes/colors.dart';
 import '../widget/scaffold_message.dart';
 import 'database_helper.dart';
 
 
-const url = 'http://192.168.1.3:3000';
+const url = 'http://192.168.1.34:3000';
 
 const storage =  FlutterSecureStorage();
 final dbHelper = DatabaseHelper();
@@ -33,12 +33,37 @@ Future <void> addTask (BuildContext context,
       final jsonResponse = jsonDecode(response.body);
       int taskId = jsonResponse['id'];
       DateTime parsedDueDate = DateTime.parse(dueDate);
-      await scheduleNotification(taskId, "Tâche créée", "La tâche '${jsonResponse['title']}' a été créée avec succès", DateTime.now().add(Duration(seconds: 5)));
-      await scheduleNotification(taskId + 1000, "Échéance de la tâche", "La tâche '${jsonResponse['title']}' est arrivée à échéance", parsedDueDate);
+      final dureeDeLaTache = parsedDueDate.difference(DateTime.now());
+      String dureeFormat = "";
+      if(dureeDeLaTache.inDays > 0){
+         dureeFormat= '${dureeDeLaTache.inDays} jours';
+      }else if (dureeDeLaTache.inHours > 0) {
+         dureeFormat = '${dureeDeLaTache.inHours} heures';
+      } else if (dureeDeLaTache.inMinutes > 0) {
+         dureeFormat = '${dureeDeLaTache.inMinutes} minutes';
+      } else {
+         dureeFormat = '${dureeDeLaTache.inSeconds} secondes';
+      }
+      Map<String, dynamic> task = {
+         'id': taskId,
+         'title': title,
+         'content': content,
+         'priority': priority,
+         'color': color,
+         'dueDate': dueDate,
+      };
+
+      await NotificationService().showNotification(
+                                 id:taskId,
+                                 title:"Tâche créée",
+                                 body:"La tâche '${jsonResponse['title']}' a été créée avec succès d'une durée de $dureeFormat"
+                                 );
+
+      await dbHelper.insertTask(task);
       await dbHelper.insertNotification(NotificationModel(
           id:taskId,
           title:"Tache",
-          body: "La tâche '${jsonResponse['title']}' a été créée avec succès",
+          body: "La tâche '${jsonResponse['title']}' a été créée avec succès d'une durée de $dureeFormat",
           scheduledTime: DateTime.now()));
       showSnackBar(context, 'Tache "${jsonResponse['title']}" creer avec success !',backgroundColor: lightgreenColor);
    }
@@ -134,9 +159,12 @@ Future<void> deleteTask(BuildContext context,int id) async{
    );
    if(response.statusCode == 200){
       dbHelper.deleteTask(id);
-      await flutterLocalNotificationsPlugin.cancel(id);
-      await flutterLocalNotificationsPlugin.cancel(id+1000);
-      await scheduleNotification(id, "Tâche créée", "La tâche a été supprimée avec succès", DateTime.now().add(Duration(seconds: 5)));
+      dbHelper.deleteNotification(id);
+      await NotificationService().showNotification(
+         id: id,
+         title: "Tâche Supprimée",
+         body: "La tâche a été supprimée avec succès",
+      );
       dbHelper.deleteNotification(id);
       showSnackBar(context, 'Tâche supprimée avec succès!', backgroundColor: Colors.redAccent);
    }else{

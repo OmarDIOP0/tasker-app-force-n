@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController photo = TextEditingController();
+  String photo ="";
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +94,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         nameField: "Password",
                         comment: "password"
                     ),
-                    const SizedBox(height: 10),
-                    UICustumProfileForm(
-                        value: photo.text,
-                        comment: "Photo",
-                        icon: const Icon(Icons.person), onSaved: (value) {photo.text=value!; },
-                    ),
                     const SizedBox(height: 15),
                     ElevatedButton(
                         style: ButtonStyle(
@@ -116,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 email.text,
                                 password.text,
                                 username.text,
-                                photo.text
+                                photo
                             );
 
                           }

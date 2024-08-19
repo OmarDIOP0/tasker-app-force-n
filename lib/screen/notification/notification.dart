@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
-import 'package:tasker/screen/notification/all_notification.dart';
-import 'package:tasker/screen/notification/no_read_notification.dart';
+import 'package:tasker/services/NotificationModel.dart';
+import 'package:tasker/services/database_helper.dart';
+
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
 
@@ -9,39 +11,58 @@ class NotificationPage extends StatefulWidget {
   State<NotificationPage> createState() => _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> with SingleTickerProviderStateMixin{
-  late TabController _tabController;
-  @override
-  void initState(){
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
+class _NotificationPageState extends State<NotificationPage> {
+  List<NotificationModel> _notifications = [];
 
   @override
-  void dispose(){
-    _tabController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _loadNotifications();
   }
+
+  Future<void> _loadNotifications() async {
+    final dbHelper = DatabaseHelper();
+    List<NotificationModel> notifications = await dbHelper.getNotifications();
+    setState(() {
+      _notifications = notifications;
+    });
+  }
+
+  String formatDueDate(String dateStr) {
+    DateTime date = DateTime.parse(dateStr);
+    return DateFormat('dd/MM/yy').format(date);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Notification"),
         backgroundColor: verylightgreenColor,
-        bottom: TabBar(
-          controller: _tabController,
-            tabs: const [
-              Tab(icon: Icon(Icons.all_inbox),text: "Toutes"),
-              //Tab(icon: Icon(Icons.read_more),text: "Non Lues",)
-            ]
-        ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const [
-          AllNotification(),
-          //NoReadNotification(),
-        ],
+      body: _notifications.isEmpty
+          ? const Center(child: Text("Aucune notification disponible."))
+          : ListView.builder(
+        itemCount: _notifications.length,
+        itemBuilder: (context, index) {
+          final notification = _notifications[index];
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ListTile(
+                  title: Text(notification.title),
+                  subtitle: Text(notification.body),
+                  trailing: Text(formatDueDate(notification.scheduledTime.toString())),
+                ),
+                if (index < _notifications.length - 1)
+                  const Divider(
+                    color: lightgreenColor,
+                    thickness: 1.0,
+                  ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

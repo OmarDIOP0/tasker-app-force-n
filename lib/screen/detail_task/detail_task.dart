@@ -89,7 +89,13 @@ class _DetailTaskState extends State<DetailTask> {
   }
 
   void shareTaskDetails() {
-    Share.share('Tâche : ${taskDetails!["title"]} \n Contenu : ${taskDetails!["content"]}');
+    final String taskDetails = '''
+        Tâche : ${widget.nom_tache}
+        Contenu : ${widget.contenu}
+        Date d'échéance : ${formatDueDate(widget.date)}
+        Priorité : ${widget.priorite}
+    ''';
+    Share.share(taskDetails);
   }
 
   @override
@@ -117,7 +123,7 @@ class _DetailTaskState extends State<DetailTask> {
                 end: Alignment.bottomCenter,
               ),
             ),
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 10),
             child: Column(
               children: [
                 const SizedBox(height: 30),
@@ -134,7 +140,7 @@ class _DetailTaskState extends State<DetailTask> {
                     onSaved: (value) => _title = value!,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: TextFormField(
@@ -150,19 +156,19 @@ class _DetailTaskState extends State<DetailTask> {
                     onSaved: (value) => _content = value!,
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 UICustumProfileForm(
                   value: 'Création : ${formatDueDate(taskDetails!['createdAt'] ?? '')}',
                   comment: "Création de la tâche",
                   icon: const Icon(Icons.date_range), onSaved: (value ) { taskDetails!['createdAt']=value!; },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 UICustumProfileForm(
                   value: 'Modification : ${formatDueDate(taskDetails!['updatedAt'] ?? '')}',
                   comment: "Modification de la tâche",
                   icon: const Icon(Icons.date_range), onSaved: (newValue) { taskDetails!['updatedAt']=newValue!;  },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 UICustumProfileForm(
                   value: _color,
                   comment: "Couleur de la tâche",
@@ -170,7 +176,7 @@ class _DetailTaskState extends State<DetailTask> {
                     _color=value!;
                 },
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     const SizedBox(width: 20),

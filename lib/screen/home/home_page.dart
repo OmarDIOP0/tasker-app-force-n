@@ -20,16 +20,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        tooltip: "Ajouté une tache",
-        shape: const CircleBorder(),
-        elevation: 10,
-          onPressed:(){
-          Navigator.pushNamed(context, '/add-task');
-          },
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: _childreenPage[_currentIndex],
       bottomNavigationBar:BottomNavigationBar(
             unselectedItemColor: Colors.white,

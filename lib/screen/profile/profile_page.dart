@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
@@ -20,11 +22,21 @@ class _ProfilePageState extends State<ProfilePage> {
   late String _username;
   late String _email;
   late String _password;
+  String? _photoUrl;
 
   @override
   void initState() {
     super.initState();
     fetchProfile();
+  }
+
+  Future<void> _pickImage() async{
+    final pickedFile= await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(pickedFile !=null){
+      setState(() {
+        _photoUrl = pickedFile.path;
+      });
+    }
   }
 
   Future<void> fetchProfile() async {
@@ -37,6 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _username = userInfo['username'];
         _email = userInfo['email'];
         _password = userInfo['password'];
+        _photoUrl = userInfo['photo'];
       });
     } catch (e) {
       showSnackBar(context, "Erreur lors de la récupération des informations.", backgroundColor: Colors.redAccent);
@@ -46,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _updateProfile() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      updateUser(context, _prenom, _nom, _email, _password, _username, _userinfo!['photo']);
+      updateUser(context, _prenom, _nom, _email, _password, _username, _photoUrl!);
       showSnackBar(context, "Profil mis à jour avec succès.", backgroundColor: lightgreenColor);
     }
   }
@@ -69,15 +82,22 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
           ),
-          flexibleSpace: const Column(
+          flexibleSpace: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SizedBox(height: 20),
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/avatar.png'),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: (){
+                  _pickImage();
+                },
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage:_photoUrl != null && _photoUrl!.isNotEmpty
+                      ? FileImage(File(_photoUrl!)) as ImageProvider
+                      : const AssetImage('assets/images/tasker.png') as ImageProvider,
+                ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
         ),
@@ -89,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
           key: _formKey,
           child: Column(
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               Row(
                 children: [
                   Expanded(
