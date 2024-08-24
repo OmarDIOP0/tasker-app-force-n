@@ -3,9 +3,10 @@ class NotificationModel{
   late String title;
   late String body;
   late DateTime scheduledTime;
+  late int userId;
 
   NotificationModel({
-    this.id,required this.title,required this.body,required this.scheduledTime
+    this.id,required this.title,required this.body,required this.scheduledTime,required this.userId
 });
 
   Map<String,dynamic> toMap(){
@@ -21,7 +22,8 @@ class NotificationModel{
         id:map['id'],
         title:map['title'],
         body: map['body'],
-        scheduledTime: DateTime.parse(map['scheduledTime'])
+        scheduledTime: DateTime.parse(map['scheduledTime']),
+        userId: map['userId']
     );
   }
 }

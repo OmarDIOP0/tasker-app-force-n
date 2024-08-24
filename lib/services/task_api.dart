@@ -9,7 +9,7 @@ import '../widget/scaffold_message.dart';
 import 'database_helper.dart';
 
 
-const url = 'http://192.168.1.34:3000';
+const url = 'http://192.168.1.47:3000';
 
 const storage =  FlutterSecureStorage();
 final dbHelper = DatabaseHelper();
@@ -18,6 +18,7 @@ Future <void> addTask (BuildContext context,
     String title,String content,String priority,String color,String dueDate) async
 {
    String?token= await storage.read(key: 'token');
+   String?userId= await storage.read(key: 'userId');
    Map list= {
       'title': title,
       'content':content,
@@ -64,7 +65,9 @@ Future <void> addTask (BuildContext context,
           id:taskId,
           title:"Tache",
           body: "La tâche '${jsonResponse['title']}' a été créée avec succès d'une durée de $dureeFormat",
-          scheduledTime: DateTime.now()));
+          scheduledTime: DateTime.now(),
+          userId: int.parse(userId!)
+      ));
       showSnackBar(context, 'Tache "${jsonResponse['title']}" creer avec success !',backgroundColor: lightgreenColor);
    }
    else {
@@ -200,6 +203,8 @@ Future<void> login(BuildContext context,
    if(response.statusCode ==200){
       final data = jsonDecode(response.body);
       await storage.write(key: 'token', value: data['access_token']);
+      await storage.write(key: 'userId', value: data['id'].toString());
+      print("User ID stocké : ${data['id']}");
       showSnackBar(context, "Login Successfully",backgroundColor: lightgreenColor);
       Navigator.pushNamed(context, '/');
    }

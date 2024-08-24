@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/services/NotificationModel.dart';
 import 'package:tasker/services/database_helper.dart';
+import 'package:tasker/services/task_api.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -21,12 +22,19 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<void> _loadNotifications() async {
-    final dbHelper = DatabaseHelper();
-    List<NotificationModel> notifications = await dbHelper.getNotifications();
+    String? userIdStr = await storage.read(key: 'userId');
+    if (userIdStr == null || userIdStr.isEmpty) {
+      print("Erreur : userId est null ou vide");
+      return;
+    }
+    int userId = int.parse(userIdStr);
+    List<NotificationModel> notifications = await dbHelper.getNotifications(userId);
     setState(() {
       _notifications = notifications;
     });
   }
+
+
 
   String formatDueDate(String dateStr) {
     DateTime date = DateTime.parse(dateStr);

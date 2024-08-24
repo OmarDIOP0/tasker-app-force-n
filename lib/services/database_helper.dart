@@ -46,7 +46,8 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
         body TEXT,
-        scheduledTime TEXT
+        scheduledTime TEXT,
+        userId INTEGER
       )
     ''');
   }
@@ -71,9 +72,9 @@ class DatabaseHelper {
     return await db.insert('notifications', notification.toMap());
   }
 
-  Future<List<NotificationModel>> getNotifications() async {
+  Future<List<NotificationModel>> getNotifications(int userId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('notifications');
+    final List<Map<String, dynamic>> maps = await db.query('notifications', where: "userId = ?", whereArgs: [userId]);
     return List.generate(maps.length, (index) {
       return NotificationModel.fromMap(maps[index]);
     });
