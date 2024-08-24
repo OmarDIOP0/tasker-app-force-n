@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/scaffold_message.dart';
-import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_profile_form.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -81,7 +80,6 @@ class _DetailTaskState extends State<DetailTask> {
         _isLoading = false;
       });
     } catch (error) {
-      print("Erreur lors de la récupération des détails de la tâche : $error");
       setState(() {
         _isLoading = false;
       });

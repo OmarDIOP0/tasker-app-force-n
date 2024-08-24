@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
-import 'package:tasker/screen/home/home_page.dart';
-import 'package:tasker/screen/register/register.dart';
 import 'package:tasker/services/task_api.dart';
 import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';

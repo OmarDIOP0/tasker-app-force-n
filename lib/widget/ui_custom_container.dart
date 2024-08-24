@@ -12,11 +12,6 @@ class UICustomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-      //GestureDetector(
-      //onTap: (){
-       // print("Vous avez clique sur le projet : $projetName");
-      //},
-     // child:
     ClipRRect(
         child: Container(
           padding:const EdgeInsets.only(left: 10,top: 0,bottom: 2),
@@ -37,25 +32,6 @@ class UICustomContainer extends StatelessWidget {
                       const Icon(Icons.light_mode_sharp,color: lightgreenColor,),
                       const SizedBox(width: 10),
                       Text(projetName ,style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      PopupMenuButton<String>(
-                        onSelected: (value){
-                          print("Action selectionnée : $value");
-                        },
-                        itemBuilder: (BuildContext context){
-                          return {'Modifier','Supprimer'}
-                              .map((String choice){
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
-                        icon: const Icon(Icons.more_vert),
-                      ),
                     ],
                   ),
                 ],
@@ -84,7 +60,6 @@ class UICustomContainer extends StatelessWidget {
             ],
           ),
         ),
-     // ),
     );
   }
 }

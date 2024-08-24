@@ -9,7 +9,7 @@ import '../widget/scaffold_message.dart';
 import 'database_helper.dart';
 
 
-const url = 'http://192.168.1.47:3000';
+const url = 'http://192.168.75.114:3000';
 
 const storage =  FlutterSecureStorage();
 final dbHelper = DatabaseHelper();
@@ -19,6 +19,7 @@ Future <void> addTask (BuildContext context,
 {
    String?token= await storage.read(key: 'token');
    String?userId= await storage.read(key: 'userId');
+   if (userId == null) return;
    Map list= {
       'title': title,
       'content':content,
@@ -61,13 +62,16 @@ Future <void> addTask (BuildContext context,
                                  );
 
       await dbHelper.insertTask(task);
-      await dbHelper.insertNotification(NotificationModel(
-          id:taskId,
-          title:"Tache",
-          body: "La tâche '${jsonResponse['title']}' a été créée avec succès d'une durée de $dureeFormat",
-          scheduledTime: DateTime.now(),
-          userId: int.parse(userId!)
-      ));
+      NotificationModel notification = NotificationModel(
+         id: taskId,
+         title: "Tâche créée",
+         body:
+         "La tâche '${jsonResponse['title']}' a été créée avec succès d'une durée de $dureeFormat",
+         date: DateTime.now(),
+         isRead: false,
+      );
+      await createNotification(notification);
+
       showSnackBar(context, 'Tache "${jsonResponse['title']}" creer avec success !',backgroundColor: lightgreenColor);
    }
    else {
@@ -144,36 +148,45 @@ Future<void> updateTask(
          final jsonResponse = jsonDecode(response.body);
          showSnackBar(context, 'Tâche "${jsonResponse['title']}" mise à jour avec succès', backgroundColor: lightgreenColor,);
       } else {
-         print('Erreur: ${response.statusCode}, Corps de la réponse: ${response.body}');
          showSnackBar(context, 'Erreur lors de la mise à jour de la tâche', backgroundColor: Colors.redAccent,);
       }
    } catch (e) {
-      print('Exception $e');
       showSnackBar(context, 'Erreur de réseau !', backgroundColor: Colors.redAccent,);
    }
 }
 
 
-Future<void> deleteTask(BuildContext context,int id) async{
-   String?token= await storage.read(key: 'token');
+Future<void> deleteTask(BuildContext context, int id) async {
+   String? token = await storage.read(key: 'token');
    final dbHelper = DatabaseHelper();
+
    final response = await http.delete(Uri.parse("$url/task/$id"),
-      headers: {"Content-Type": "application/json","Authorization": "Bearer $token"},
+      headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"},
    );
-   if(response.statusCode == 200){
+   if (response.statusCode == 200) {
       dbHelper.deleteTask(id);
-      dbHelper.deleteNotification(id);
+
       await NotificationService().showNotification(
          id: id,
          title: "Tâche Supprimée",
          body: "La tâche a été supprimée avec succès",
       );
-      dbHelper.deleteNotification(id);
-      showSnackBar(context, 'Tâche supprimée avec succès!', backgroundColor: Colors.redAccent);
-   }else{
+
+         NotificationModel notification = NotificationModel(
+            id: id,
+            title: "Tâche Supprimée",
+            body: "La tâche a été supprimée avec succès",
+            date: DateTime.now(),
+            isRead: false,
+         );
+         await createNotification(notification);
+         //await deleteNotification(id);
+         showSnackBar(context, 'Tâche supprimée avec succès!', backgroundColor: Colors.redAccent);
+   } else {
       showSnackBar(context, 'Erreur lors de la suppression de la tâche!', backgroundColor: Colors.redAccent);
    }
 }
+
 Future<void> register(BuildContext context,
     String prenom,
     String nom,
@@ -257,7 +270,6 @@ Future<void> updateUser(
          showSnackBar(context, 'Erreur lors de la mise à jour du profil', backgroundColor: Colors.redAccent,);
       }
    } catch (e) {
-      print('Exception $e');
       showSnackBar(context, 'Erreur de réseau !', backgroundColor: Colors.redAccent,);
    }
 }
@@ -273,6 +285,39 @@ Future<Map<String,dynamic>> getUserProfile() async {
       else{
          throw Exception("Echec lors de la recuperation des info de l'utilisateur");
       }
+}
+
+Future<List<NotificationModel>> fetchNotifications() async {
+   String? token = await storage.read(key: 'token');
+   final response = await http.get(Uri.parse("$url/notification"),
+      headers: {"Content-Type":"application/json","Authorization": "Bearer $token"},
+   );
+
+   if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => NotificationModel.fromJson(data)).toList();
+   } else {
+      throw Exception('Failed to load notifications');
+   }
+}
+
+Future<void> createNotification(NotificationModel notification) async {
+   String? token = await storage.read(key: 'token');
+   final response = await http.post(
+      Uri.parse("$url/notification"),
+      headers: {"Content-Type":"application/json","Authorization": "Bearer $token"},
+      body: jsonEncode(notification.toJson()),
+   );
+   if (response.statusCode != 201) {
+      throw Exception('Failed to create notification');
+   }
+}
+Future<void> deleteNotification(int id) async {
+   final response = await http.delete(Uri.parse('$url/notification/id'));
+
+   if (response.statusCode != 200) {
+      throw Exception('Failed to delete notification');
+   }
 }
 
 

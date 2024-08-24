@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/services/NotificationModel.dart';
-import 'package:tasker/services/database_helper.dart';
-import 'package:tasker/services/task_api.dart';
+import '../../services/task_api.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -14,6 +13,7 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   List<NotificationModel> _notifications = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -22,18 +22,18 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   Future<void> _loadNotifications() async {
-    String? userIdStr = await storage.read(key: 'userId');
-    if (userIdStr == null || userIdStr.isEmpty) {
-      print("Erreur : userId est null ou vide");
-      return;
+    try {
+      List<NotificationModel> notifications = await fetchNotifications();
+      setState(() {
+        _notifications = notifications;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
     }
-    int userId = int.parse(userIdStr);
-    List<NotificationModel> notifications = await dbHelper.getNotifications(userId);
-    setState(() {
-      _notifications = notifications;
-    });
   }
-
 
 
   String formatDueDate(String dateStr) {
@@ -45,30 +45,30 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notification"),
+        title: const Text("Notifications"),
         backgroundColor: verylightgreenColor,
       ),
-      body: _notifications.isEmpty
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _notifications.isEmpty
           ? const Center(child: Text("Aucune notification disponible."))
           : ListView.builder(
         itemCount: _notifications.length,
         itemBuilder: (context, index) {
           final notification = _notifications[index];
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                ListTile(
-                  title: Text(notification.title),
-                  subtitle: Text(notification.body),
-                  trailing: Text(formatDueDate(notification.scheduledTime.toString())),
+          return Column(
+            children: [
+              ListTile(
+                title: Text(notification.title),
+                subtitle: Text(notification.body),
+                trailing: Text(formatDueDate(notification.date.toString())),
+              ),
+              if (index < _notifications.length - 1)
+                const Divider(
+                  color: lightgreenColor,
+                  thickness: 1.0,
                 ),
-                if (index < _notifications.length - 1)
-                  const Divider(
-                    color: lightgreenColor,
-                    thickness: 1.0,
-                  ),
-              ],
-            ),
+            ],
           );
         },
       ),

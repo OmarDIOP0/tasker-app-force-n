@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/services/notification_service.dart';
 import 'package:tasker/widget/routegenerator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 void main() async {

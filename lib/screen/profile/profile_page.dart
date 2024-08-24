@@ -71,10 +71,10 @@ class _ProfilePageState extends State<ProfilePage> {
         preferredSize: const Size.fromHeight(200),
         child: AppBar(
           title: _userinfo == null
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : Text(
             "${_userinfo?['prenom']} ${_userinfo?['nom']}",
-            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+            style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           automaticallyImplyLeading: false,
@@ -103,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       body: _userinfo == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: UICustumProfileForm(
                       value: _prenom,
                       comment: "Prénom",
-                      icon: Icon(Icons.person),
+                      icon: const Icon(Icons.person),
                       onSaved: (newValue) {
                         _prenom = newValue!;
                       },
@@ -126,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: UICustumProfileForm(
                       value: _nom,
                       comment: "Nom",
-                      icon: Icon(Icons.person),
+                      icon: const Icon(Icons.person),
                       onSaved: (newValue) {
                         _nom = newValue!;
                       },
@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
               UICustumProfileForm(
                 value: _username,
                 comment: "Nom d'utilisateur",
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 onSaved: (newValue) {
                   _username = newValue!;
                 },
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
               UICustumProfileForm(
                 value: _email,
                 comment: "Email",
-                icon: Icon(Icons.mail),
+                icon: const Icon(Icons.mail),
                 onSaved: (newValue) {
                   _email = newValue!;
                 },

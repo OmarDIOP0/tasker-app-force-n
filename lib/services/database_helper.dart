@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'NotificationModel.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -41,15 +40,6 @@ class DatabaseHelper {
         userId INTEGER
       )
     ''');
-    await db.execute('''
-      CREATE TABLE notifications(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        body TEXT,
-        scheduledTime TEXT,
-        userId INTEGER
-      )
-    ''');
   }
 
   Future<void> insertTask(Map<String, dynamic> task) async {
@@ -67,21 +57,4 @@ class DatabaseHelper {
     await db.delete('tasks', where: "id = ?", whereArgs: [id]);
   }
 
-  Future<int> insertNotification(NotificationModel notification) async {
-    final db = await database;
-    return await db.insert('notifications', notification.toMap());
-  }
-
-  Future<List<NotificationModel>> getNotifications(int userId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('notifications', where: "userId = ?", whereArgs: [userId]);
-    return List.generate(maps.length, (index) {
-      return NotificationModel.fromMap(maps[index]);
-    });
-  }
-
-  Future<void> deleteNotification(int id) async {
-    final db = await database;
-    await db.delete('notifications', where: "id = ?", whereArgs: [id]);
-  }
 }

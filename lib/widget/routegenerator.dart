@@ -4,7 +4,6 @@ import 'package:tasker/screen/home/home_page.dart';
 import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/screen/notification/notification.dart';
 import 'package:tasker/screen/onboarding/onboarding.dart';
-import 'package:tasker/screen/profile/profile_page.dart';
 import 'package:tasker/screen/register/register.dart';
 
 class RouteGenerator{

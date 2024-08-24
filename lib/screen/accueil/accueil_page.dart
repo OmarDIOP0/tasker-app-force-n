@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,7 @@ class _AccueilPageState extends State<AccueilPage> {
   bool _isLoading = true;
   late final formatDate;
   Map<String,dynamic>? _userinfo;
+
   Future<void> _requestPermissions() async {
     if (await Permission.notification.isDenied) {
       await Permission.notification.request();
@@ -56,24 +58,25 @@ class _AccueilPageState extends State<AccueilPage> {
       showSnackBar(context, "Erreur lors de la récupération des informations.", backgroundColor: Colors.redAccent);
     }
   }
+
   void fetchAndSetTasks() async {
-    try{
-        List <Map<String,dynamic>> tasks = await fetchTasks();
-        setState(() {
-            _tasks = tasks;
-            _filteredTasks = _tasks;
-            _isLoading = false;
-        });
+    try {
+      List<Map<String, dynamic>> tasks = await fetchTasks();
+      setState(() {
+        _tasks = tasks;
+        _filteredTasks = _tasks;
+        _isLoading = false;
+      });
+    } catch (error) {
+      _isLoading = false;
     }
-    catch(error){
-      print("Error lors du listing des taches $error");
-      _isLoading =false;
-    }
- }
- String formatDueDate(String dateStr){
+  }
+
+  String formatDueDate(String dateStr) {
     DateTime date = DateTime.parse(dateStr);
     return DateFormat('dd MMMM yyyy').format(date);
- }
+  }
+
   void _filterTasks() {
     setState(() {
       if (search.text.isEmpty) {
@@ -119,7 +122,6 @@ class _AccueilPageState extends State<AccueilPage> {
     if (result == true) {
       fetchAndSetTasks();
     }
-
   }
 
   @override
@@ -150,8 +152,7 @@ class _AccueilPageState extends State<AccueilPage> {
         centerTitle: true,
         backgroundColor: verylightgreenColor,
       ),
-      body:
-      Container(
+      body: Container(
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -160,8 +161,8 @@ class _AccueilPageState extends State<AccueilPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: _tasks==null
-          ? const Center(child:CircularProgressIndicator())
+        child: _tasks == null
+            ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.only(left: 15, right: 15),
@@ -170,12 +171,17 @@ class _AccueilPageState extends State<AccueilPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 10),
-                  _isLoading
-                    ?const Center(child: CircularProgressIndicator())
-                    :Row(
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : Row(
                   children: [
                     const Text("Hello ! "),
-                    Text("${_userinfo?['prenom']} ${_userinfo?['nom']}", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)
+                    Text(
+                      "${_userinfo?['prenom']} ${_userinfo?['nom']}",
+                      style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    )
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -197,7 +203,8 @@ class _AccueilPageState extends State<AccueilPage> {
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 10.0),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -244,14 +251,23 @@ class _AccueilPageState extends State<AccueilPage> {
                       const TextSpan(text: 'Total :'),
                       TextSpan(
                         text: ' ${_filteredTasks.length}',
-                        style: const TextStyle(color: deepgreenColor, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: deepgreenColor,
+                            fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 15),
-                Column(
-                  children:_filteredTasks.map((task) {
+                _filteredTasks.isEmpty
+                    ? const Center(
+                  child: Text(
+                    "La liste des tâches est vide.",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                )
+                    : Column(
+                  children: _filteredTasks.map((task) {
                     return GestureDetector(
                       onTap: () {
                         _navigateToDetail(
@@ -271,7 +287,8 @@ class _AccueilPageState extends State<AccueilPage> {
                             : task['color'] == 'green'
                             ? lightgreenColor
                             : Colors.yellow,
-                        dateTime: formatDueDate(task['dueDate'] ?? 'No Date') ,
+                        dateTime: formatDueDate(
+                            task['dueDate'] ?? 'No Date'),
                       ),
                     );
                   }).toList(),
@@ -284,7 +301,7 @@ class _AccueilPageState extends State<AccueilPage> {
       floatingActionButton: FloatingActionButton(
         tooltip: "Ajouté une tache",
         elevation: 10,
-        onPressed:(){
+        onPressed: () {
           Navigator.pushNamed(context, '/add-task');
         },
         child: const Icon(Icons.add),
@@ -293,10 +310,7 @@ class _AccueilPageState extends State<AccueilPage> {
       drawer: Drawer(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(0),
-                topLeft: Radius.circular(0)
-            )
-        ),
+                topRight: Radius.circular(0), topLeft: Radius.circular(0))),
         backgroundColor: verylightgreenColor,
         width: 220,
         child: ListView(
@@ -306,17 +320,29 @@ class _AccueilPageState extends State<AccueilPage> {
               decoration: const BoxDecoration(
                 color: deepgreenColor,
               ),
-              accountName: _isLoading == true ? const SingleChildScrollView(): Text("${_userinfo?['prenom']} ${_userinfo?['nom']}"),
-              accountEmail: _isLoading == true ? const SingleChildScrollView():Text("${_userinfo?['email']}"),
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage("assets/images/avatar.png"), // Remplacez par le chemin de votre image d'avatar
+              accountName: _isLoading == true
+                  ? const SingleChildScrollView()
+                  : Text("${_userinfo?['prenom']} ${_userinfo?['nom']}"),
+              accountEmail: _isLoading == true
+                  ? const SingleChildScrollView()
+                  : Text("${_userinfo?['email']}"),
+              currentAccountPicture: CircleAvatar(
+                radius: 50,
+                backgroundImage: _userinfo != null &&
+                    _userinfo!.containsKey('photo') &&
+                    _userinfo!['photo'] != null &&
+                    _userinfo!['photo']!.isNotEmpty
+                    ? FileImage(File(_userinfo!['photo']!))
+                    : const AssetImage('assets/images/tasker.png')
+                as ImageProvider,
               ),
             ),
             ListTile(
               leading: const Icon(Icons.account_circle),
               title: const Text("Mon compte"),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const ProfilePage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ProfilePage()));
               },
             ),
             ListTile(
@@ -324,13 +350,6 @@ class _AccueilPageState extends State<AccueilPage> {
               title: const Text("Partager"),
               onTap: () {
                 Share.share("TASKER APPLICATION");
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text("Paramètres"),
-              onTap: () {
-
               },
             ),
             const Divider(

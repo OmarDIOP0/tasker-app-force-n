@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tasker/screen/home/home_page.dart';
-import 'package:tasker/screen/login/login.dart';
-import 'package:tasker/screen/register/register.dart';
 import 'package:tasker/widget/application_name.dart';
 
 import '../../constantes/colors.dart';

@@ -1,29 +1,34 @@
-class NotificationModel{
-  int? id;
-  late String title;
-  late String body;
-  late DateTime scheduledTime;
-  late int userId;
+class NotificationModel {
+  final int id;
+  final String title;
+  final String body;
+  final DateTime date;
+  final bool isRead;
 
   NotificationModel({
-    this.id,required this.title,required this.body,required this.scheduledTime,required this.userId
-});
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.date,
+    required this.isRead,
+  });
 
-  Map<String,dynamic> toMap(){
-    return {
-      'id':id,
-      'title':title,
-      'body':body,
-      'scheduledTime':scheduledTime.toIso8601String(),
-    };
-  }
-  factory NotificationModel.fromMap(Map<String,dynamic> map){
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-        id:map['id'],
-        title:map['title'],
-        body: map['body'],
-        scheduledTime: DateTime.parse(map['scheduledTime']),
-        userId: map['userId']
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],
+      date: DateTime.parse(json['date']),
+      isRead: json['isRead'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'body': body,
+      'date': date.toIso8601String(),
+      'isRead': isRead,
+    };
   }
 }

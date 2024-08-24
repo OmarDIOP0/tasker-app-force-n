@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
 import 'package:tasker/screen/accueil/accueil_page.dart';
 import 'package:tasker/screen/profile/profile_page.dart';

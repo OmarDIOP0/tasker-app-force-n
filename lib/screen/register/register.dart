@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tasker/constantes/colors.dart';
-import 'package:tasker/screen/home/home_page.dart';
-import 'package:tasker/screen/login/login.dart';
 import 'package:tasker/services/task_api.dart';
-import 'package:tasker/widget/application_name.dart';
-import 'package:tasker/widget/custom_appbar_clipper.dart';
 import 'package:tasker/widget/scaffold_message.dart';
 import 'package:tasker/widget/ui_appbar_form.dart';
 import 'package:tasker/widget/ui_custom_Form.dart';
 import 'package:tasker/widget/ui_custom_password_field.dart';
-import 'package:tasker/widget/ui_custom_profile_form.dart';
 import 'package:tasker/widget/ui_custom_register_form.dart';
 
 class RegisterPage extends StatefulWidget {
